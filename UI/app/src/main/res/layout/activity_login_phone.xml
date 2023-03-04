@@ -37,6 +37,52 @@
         android:hint="휴대폰 번호를 입력해주세요"
         android:padding="10dp"/>
 
+    <LinearLayout
+        android:id="@+id/authNum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <EditText
+            android:id="@+id/editTextAuthNum"
+            android:layout_width="340dp"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:inputType="phone"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp"/>
+
+        <TextView
+            android:id="@+id/timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="time"
+            android:text="00"
+            android:textSize="15dp"
+            android:textColor="@color/purple_200"/>
+
+        <TextView
+            android:id="@+id/divider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="time"
+            android:padding="2.5dp"
+            android:text=":"
+            android:textSize="15dp"
+            android:textColor="@color/purple_200"/>
+
+        <TextView
+            android:id="@+id/timer2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="time"
+            android:text="00"
+            android:textSize="15dp"
+            android:textColor="@color/purple_200"/>
+
+    </LinearLayout>
+
     <android.widget.Button
         android:id="@+id/button2"
         android:layout_width="match_parent"
@@ -45,6 +91,18 @@
         android:textColor="#aaa"
         android:text="인증문자 받기"
         android:enabled="false"
+        android:background="@drawable/btn_1"/>
+
+    <android.widget.Button
+        android:id="@+id/button3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="#aaa"
+        android:visibility="gone"
+        android:text="번호인증완료"
+        android:enabled="false"
+        android:layout_marginTop="20dp"
         android:background="@drawable/btn_1"/>
 
     <LinearLayout
