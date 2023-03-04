@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/easyfarm?serverTimezone=Asia/Seoul
+    username: user1
+    password: 1234
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+server:
+  port: 9090
+sms:
+  serviceId: ncp:sms:kr:303378693701:clonemarket
+  accessKey: hUpV911uJ8qDRF951RYx
+  secretKey: 38kGXq9twml9AQDGuHWrLDXt61Cx75Pj9YeHnmhW
