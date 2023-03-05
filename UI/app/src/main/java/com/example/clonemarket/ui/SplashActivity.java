@@ -1,10 +1,13 @@
-package com.example.clonemarket;
+package com.example.clonemarket.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
+import com.example.clonemarket.R;
+import com.example.clonemarket.ui.LoginPhoneActivity;
 
 public class SplashActivity extends AppCompatActivity {
 

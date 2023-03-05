@@ -1,8 +1,10 @@
-package com.example.clonemarket;
+package com.example.clonemarket.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.clonemarket.R;
 
 public class MainActivity extends AppCompatActivity {
 

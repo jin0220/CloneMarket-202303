@@ -1,6 +1,8 @@
-package com.example.clonemarket;
+package com.example.clonemarket.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -14,7 +16,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.example.clonemarket.R;
+import com.google.gson.JsonObject;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -25,6 +28,8 @@ public class LoginPhoneActivity extends AppCompatActivity {
     Button msg, confirm;
     LinearLayout authNum;
     int minute, second;
+
+    UserViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +44,7 @@ public class LoginPhoneActivity extends AppCompatActivity {
         secondText = findViewById(R.id.timer2);
         editTextAuthNum = findViewById(R.id.editTextAuthNum);
         confirm = findViewById(R.id.button3);
+
 
         editTextPhone.addTextChangedListener(new TextWatcher() {
             @Override
@@ -59,6 +65,8 @@ public class LoginPhoneActivity extends AppCompatActivity {
 
             }
         });
+
+        viewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         msg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +110,24 @@ public class LoginPhoneActivity extends AppCompatActivity {
                 };
 
                 timer.schedule(timerTask, 0, 1000); //Timer 실행
+
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("phoneNum", editTextPhone.getText().toString());
+                jsonObject.addProperty("content", "test");
+
+                viewModel.getAuthNumResult(jsonObject);
+
+                viewModel.response.observe(LoginPhoneActivity.this, new Observer<JsonObject>() {
+                    @Override
+                    public void onChanged(JsonObject result) {
+                        if(result.get("result").getAsBoolean()){
+                            Log.d("confirm", "success");
+                        }
+                        else {
+                            Log.d("confirm", "fail");
+                        }
+                    }
+                });
             }
         });
 
@@ -126,13 +152,17 @@ public class LoginPhoneActivity extends AppCompatActivity {
             }
         });
 
+
+
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginPhoneActivity.this, MainActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(LoginPhoneActivity.this, MainActivity.class);
+//                startActivity(intent);
             }
         });
+
+
 
         emailLogin.setOnClickListener(new View.OnClickListener() {
             @Override

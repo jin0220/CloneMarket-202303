@@ -1,4 +1,4 @@
-package com.example.clonemarket;
+package com.example.clonemarket.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.clonemarket.R;
 
 public class LoginEmailActivity extends AppCompatActivity {
     TextView editTextEmail;
