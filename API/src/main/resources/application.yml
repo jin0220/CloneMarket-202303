@@ -13,6 +13,10 @@ spring:
       hibernate.format_sql: true
 server:
   port: 9090
+#logging:
+#  level:
+#    org.apache.http: DEBUG
+#    httpclient.wire: DEBUG
 sms:
   serviceId: ncp:sms:kr:303378693701:clonemarket
   accessKey: hUpV911uJ8qDRF951RYx

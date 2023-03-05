@@ -1,5 +1,9 @@
 package com.example.toy.entity.response;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
 public class Message {
     private StatusEnum status;
     private String message;

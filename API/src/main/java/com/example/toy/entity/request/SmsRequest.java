@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @NoArgsConstructor
 @Getter @Setter
@@ -14,5 +16,5 @@ public class SmsRequest {
     private String countryCode; // 국가 번호
     private String from; // 발신번호
     private String content; // 기본 메시지 내용
-    private SmsDto message; //메시지 정보
+    private List<SmsDto> messages; //메시지 정보
 }

@@ -3,9 +3,14 @@ package com.example.toy.service;
 import com.example.toy.dto.SmsDto;
 import com.example.toy.entity.request.SmsRequest;
 import com.example.toy.entity.response.SmsResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -20,14 +25,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @Service
 @Transactional
 public class SmsService {
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @Value("${sms.serviceId}")
     private String serviceId;
@@ -39,14 +43,14 @@ public class SmsService {
     /**
      * sms open api 요청하기
      * @param phoneNum
-     * @param content
      * @return
      * @throws UnsupportedEncodingException
      * @throws NoSuchAlgorithmException
      * @throws InvalidKeyException
      * @throws URISyntaxException
      */
-    public SmsResponse sendSms(String phoneNum, String content) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, URISyntaxException {
+    public SmsResponse sendSms(String phoneNum) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, URISyntaxException, JsonProcessingException {
+
         Long time = System.currentTimeMillis();
 
         HttpHeaders headers = new HttpHeaders();
@@ -64,21 +68,29 @@ public class SmsService {
             numStr += ran;
         }
 
-        SmsDto message = new SmsDto();
-        message.setTo(phoneNum);
-        message.setContent(content);
+        String content = "CloneMarket 본인인증 ["+numStr+"]";
+
+        List<SmsDto> message = new ArrayList<>();
+        message.add(new SmsDto(phoneNum, content));
 
         SmsRequest request = new SmsRequest();
         request.setType("SMS");
         request.setContentType("COMM");
         request.setCountryCode("82");
         request.setFrom("01054872338");
-        request.setContent("CloneMarket 본인인증 ["+rand+"]");
-        request.setMessage(message);
+        request.setContent("CloneMarket 본인인증 ["+numStr+"]");
+        request.setMessages(message);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonBody = objectMapper.writeValueAsString(request);
+
+        HttpEntity<String> body = new HttpEntity<>(jsonBody,headers);
+
+        log.info(body.getBody());
 
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
-        SmsResponse smsResponse = restTemplate.postForObject(new URI("https://sens.apigw.ntruss.com/sms/v2/services/"+this.serviceId+"/messages"), request, SmsResponse.class);
+        SmsResponse smsResponse = restTemplate.postForObject(new URI("https://sens.apigw.ntruss.com/sms/v2/services/"+this.serviceId+"/messages"), body, SmsResponse.class);
 
         return smsResponse;
     }
