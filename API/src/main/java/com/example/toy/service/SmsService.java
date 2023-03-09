@@ -90,7 +90,11 @@ public class SmsService {
 
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
-        SmsResponse smsResponse = restTemplate.postForObject(new URI("https://sens.apigw.ntruss.com/sms/v2/services/"+this.serviceId+"/messages"), body, SmsResponse.class);
+        SmsResponse smsResponse = new SmsResponse();
+        //smsResponse = restTemplate.postForObject(new URI("https://sens.apigw.ntruss.com/sms/v2/services/"+this.serviceId+"/messages"), body, SmsResponse.class);
+
+        smsResponse.setStatusName("success"); // test 시에만 사용
+        smsResponse.setAuthNum(numStr);
 
         return smsResponse;
     }

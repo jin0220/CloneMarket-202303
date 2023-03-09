@@ -43,14 +43,14 @@ public class SmsController {
     @PostMapping("/sms")
     @ResponseBody
     public ResponseEntity<Message> sms(@RequestBody HashMap<String, Object> param) throws UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, JsonProcessingException {
-        //SmsResponse response = smsService.sendSms(param.get("phoneNum").toString());
+        SmsResponse response = smsService.sendSms(param.get("phoneNum").toString());
 
         Message message = new Message();
-        Map<String, Boolean> map  = new HashMap<>();
+        Map<String, String> map  = new HashMap<>();
 
-        if(!param.get("phoneNum").equals(null) && !param.get("content").equals(null)) {
+        if(response.getStatusName().equals("success")) {
             log.info("success");
-            map.put("result", true);
+            map.put("authNum", response.getAuthNum());
 
             message.setMessage("Success");
             message.setStatus(StatusEnum.OK);
@@ -58,7 +58,7 @@ public class SmsController {
         }
         else {
             log.info("Fail");
-            map.put("result", false);
+            map.put("authNum", null);
 
             message.setMessage("Fail");
             message.setStatus(StatusEnum.OK);
