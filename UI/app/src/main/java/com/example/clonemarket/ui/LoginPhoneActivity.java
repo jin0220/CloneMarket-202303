@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.clonemarket.R;
 import com.google.gson.JsonObject;
@@ -30,6 +31,7 @@ public class LoginPhoneActivity extends AppCompatActivity {
     int minute, second;
 
     UserViewModel viewModel;
+    String responseAuthNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,11 +122,12 @@ public class LoginPhoneActivity extends AppCompatActivity {
                 viewModel.response.observe(LoginPhoneActivity.this, new Observer<JsonObject>() {
                     @Override
                     public void onChanged(JsonObject result) {
-                        if(result.get("result").getAsBoolean()){
+                        if (!result.get("authNum").getAsString().equals(null)) {
                             Log.d("confirm", "success");
-                        }
-                        else {
+                            responseAuthNum = result.get("authNum").getAsString();
+                        } else {
                             Log.d("confirm", "fail");
+                            Toast.makeText(getApplicationContext(), "서버 요청 오류로 잠시 후 다시 시도해주세요.", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -153,15 +156,15 @@ public class LoginPhoneActivity extends AppCompatActivity {
         });
 
 
-
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(LoginPhoneActivity.this, MainActivity.class);
-//                startActivity(intent);
+                if (editTextAuthNum.getText().toString().equals(responseAuthNum)) {
+                    Intent intent = new Intent(LoginPhoneActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
             }
         });
-
 
 
         emailLogin.setOnClickListener(new View.OnClickListener() {
