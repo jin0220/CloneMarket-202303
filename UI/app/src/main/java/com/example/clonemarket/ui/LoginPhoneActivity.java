@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.clonemarket.R;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.Timer;
@@ -160,8 +161,27 @@ public class LoginPhoneActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (editTextAuthNum.getText().toString().equals(responseAuthNum)) {
-                    Intent intent = new Intent(LoginPhoneActivity.this, MainActivity.class);
-                    startActivity(intent);
+
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("phoneNum", editTextPhone.getText().toString());
+
+                    viewModel.getLoginResult(jsonObject);
+
+                    viewModel.response2.observe(LoginPhoneActivity.this, new Observer<Boolean>() {
+                        @Override
+                        public void onChanged(Boolean result) {
+                            if (result) {
+                                Log.d("confirm", "success");
+
+                                Intent intent = new Intent(LoginPhoneActivity.this, MainActivity.class);
+                                startActivity(intent);
+
+                            } else {
+                                Log.d("confirm", "fail");
+                                Toast.makeText(getApplicationContext(), "서버 요청 오류로 잠시 후 다시 시도해주세요.", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
                 }
             }
         });

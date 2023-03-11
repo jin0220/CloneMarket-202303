@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.clonemarket.data.api.RetrofitClient;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -14,7 +15,7 @@ import retrofit2.Response;
 
 public class UserRepository {
 
-    public MutableLiveData<JsonObject> dataList = new MutableLiveData<>();
+    public MutableLiveData<JsonObject> dataList =  new MutableLiveData<>();
 
     public void getAuthNumResult(JsonObject jsonObject) {
 
@@ -43,6 +44,33 @@ public class UserRepository {
             }
         });
 
+    }
+
+
+    public MutableLiveData<Boolean> dataList2 =  new MutableLiveData<>();
+
+    public void getLoginResult(JsonObject jsonObject){
+
+        Call<JsonObject> call = RetrofitClient.api().getLoginResult(jsonObject);
+
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()){
+                    Log.d("confirm", "getLoginResult() 응답 성공 ->" + response.body().get("data").getAsJsonObject().get("result"));
+                    dataList2.setValue(response.body().get("data").getAsJsonObject().get("result").getAsBoolean());
+                }
+                else{
+                    Log.d("confirm", "getLoginResult() 응답 실패");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                t.printStackTrace();
+                Log.d("confirm", "getLoginResult() 통신 실패");
+            }
+        });
 
     }
 

@@ -27,6 +27,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // 동네 위치 찾기
+                Intent intent = new Intent(getApplication(), LocationActivity.class);
+                startActivity(intent);
             }
         });
 

@@ -6,17 +6,16 @@ import android.os.Bundle;
 
 import com.example.clonemarket.R;
 import com.example.clonemarket.databinding.ActivityLocationBinding;
-import com.example.clonemarket.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity {
+public class LocationActivity extends AppCompatActivity {
 
-    private ActivityMainBinding binding;
+    private ActivityLocationBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(R.layout.activity_location);
+        binding = ActivityLocationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
 

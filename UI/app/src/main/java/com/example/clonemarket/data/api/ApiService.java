@@ -12,4 +12,8 @@ public interface ApiService {
     @POST("/api/v1/sms")
     Call<JsonObject> getAuthNumResult(@Body JsonObject jsonObject);
 
+    @Headers("Content-Type: application/json")
+    @POST("/api/v1/login")
+    Call<JsonObject> getLoginResult(@Body JsonObject jsonObject);
+
 }
