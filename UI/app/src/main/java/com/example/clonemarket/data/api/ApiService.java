@@ -16,4 +16,7 @@ public interface ApiService {
     @POST("/api/v1/login")
     Call<JsonObject> getLoginResult(@Body JsonObject jsonObject);
 
+    @Headers("Content-Type: application/json")
+    @POST("/api/v1/location")
+    Call<JsonObject> getLocationResult(@Body JsonObject jsonObject);
 }
