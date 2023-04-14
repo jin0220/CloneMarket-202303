@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.clonemarket.data.api.RetrofitClient;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -14,7 +15,7 @@ import retrofit2.Response;
 
 public class LocationRepository {
 
-    public MutableLiveData<JsonObject> dataList =  new MutableLiveData<>();
+    public MutableLiveData<JsonArray> dataList =  new MutableLiveData<>();
 
     public void getLocationResult(JsonObject jsonObject) {
 
@@ -23,17 +24,27 @@ public class LocationRepository {
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-//                if(response.isSuccessful()){
-//                    JsonParser jsonParser = new JsonParser();
-//                    Object obj = jsonParser.parse(response.body().get("data").toString());
-//                    JsonObject data = (JsonObject) obj;
+                if(response.isSuccessful()){
+                    JsonParser jsonParser = new JsonParser();
+                    JsonObject obj = (JsonObject) jsonParser.parse(response.body().get("data").toString());
+                    JsonArray jsonArray = (JsonArray) obj.get("dataList");
+
+//                    if (jsonArray.size() > 0){
+//                        for(int i=0; i<jsonArray.size(); i++){
+//                            JsonObject jsonObj = (JsonObject) jsonArray.get(i);
+//                            Log.d("confirm", "getAuthNumResult() 응답 성공0 ->" + jsonObj.get("town"));
 //
-//                    Log.d("confirm", "getAuthNumResult() 응답 성공 ->" + data);
-//                    dataList.setValue(data);
-//                }
-//                else {
-//                    Log.d("confirm", "getAuthNumResult() 응답 실패");
-//                }
+//                        }
+//                        // StudyingAzae, Soodal 출력
+//                    }
+
+//                    Log.d("confirm", "getAuthNumResult() 응답 성공0 ->" + response.body().get("data").toString());
+                    Log.d("confirm", "getAuthNumResult() 응답 성공 ->" + jsonArray);
+                    dataList.setValue(jsonArray);
+                }
+                else {
+                    Log.d("confirm", "getAuthNumResult() 응답 실패");
+                }
             }
 
             @Override

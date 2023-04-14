@@ -8,20 +8,19 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 
 import com.example.clonemarket.R;
 import com.example.clonemarket.databinding.ActivityLocationBinding;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import java.security.Provider;
+import java.util.List;
 
 public class LocationActivity extends AppCompatActivity {
 
@@ -55,6 +54,7 @@ public class LocationActivity extends AppCompatActivity {
                 Log.d("confirm", "경도: " + cur_lon);
 
                 JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("page", 0);
                 jsonObject.addProperty("latitude", cur_lat);
                 jsonObject.addProperty("longitude", cur_lon);
 
@@ -75,8 +75,6 @@ public class LocationActivity extends AppCompatActivity {
         }
 
 
-
-
         // 동네 선택하면 휴대폰 인증 화면 이동
 
     }
@@ -89,12 +87,12 @@ public class LocationActivity extends AppCompatActivity {
 
     public void sendLocationInfo(JsonObject jsonObject) {
         viewModel.getLocationResult(jsonObject);
-
-        viewModel.response.observe(LocationActivity.this, new Observer<JsonObject>() {
+        viewModel.response.observe(LocationActivity.this, new Observer<JsonArray>() {
             @Override
-            public void onChanged(JsonObject jsonObject) {
-                if(!jsonObject.isJsonNull()){
-                    Log.d("confirm", jsonObject.get("latitude").toString());
+            public void onChanged(JsonArray jsonElements) {
+                if (!jsonElements.isJsonNull()) {
+                    List<>
+                    Log.d("confirm", jsonElements.get(0).toString());
                 }
             }
         });
