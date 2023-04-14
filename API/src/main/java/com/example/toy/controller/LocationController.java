@@ -1,6 +1,8 @@
 package com.example.toy.controller;
 
+import com.example.toy.dto.LocationDto;
 import com.example.toy.entity.response.Message;
+import com.example.toy.entity.response.StatusEnum;
 import com.example.toy.service.LocationService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -9,9 +11,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.w3c.dom.stylesheets.LinkStyle;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,9 +38,29 @@ public class LocationController {
     @ResponseBody
     public ResponseEntity<Message> getLocation(@RequestBody HashMap<String, Object> param) {
         Message message = new Message();
+        Map<String, List<LocationDto>> map = new HashMap<>();
 
-        locationService.getLocation(Double.parseDouble(param.get("latitude").toString()),
-                Double.parseDouble(param.get("longitude").toString()));
+        List<LocationDto> list = locationService.getLocation(
+                Integer.parseInt(param.get("page").toString()),
+                param.get("latitude").toString(),
+                param.get("longitude").toString()
+        );
+
+        if(!list.isEmpty()) {
+            log.info("success");
+            map.put("dataList", list);
+
+            message.setMessage("success");
+            message.setStatus(StatusEnum.OK);
+            message.setData(map);
+        }
+        else {
+            map.put("dataList", null);
+
+            message.setMessage("fail");
+            message.setStatus(StatusEnum.OK);
+            message.setData(map);
+        }
 
         return new ResponseEntity<>(message, responseHeaders, HttpStatus.OK);
     }
