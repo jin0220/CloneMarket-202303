@@ -3,8 +3,11 @@ package com.example.clonemarket.ui;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Context;
@@ -16,10 +19,13 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.clonemarket.R;
+import com.example.clonemarket.data.model.LocationDto;
 import com.example.clonemarket.databinding.ActivityLocationBinding;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LocationActivity extends AppCompatActivity {
@@ -33,6 +39,12 @@ public class LocationActivity extends AppCompatActivity {
 
     LocationViewModel viewModel;
 
+    LocationAdapter adapter;
+
+    List<LocationDto> list = new ArrayList<>();
+
+    int page;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,9 +52,16 @@ public class LocationActivity extends AppCompatActivity {
         binding = ActivityLocationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        binding.recyclerView.setLayoutManager(linearLayoutManager);
+        adapter = new LocationAdapter();
+        binding.recyclerView.setAdapter(adapter);
+
         viewModel = new ViewModelProvider(this).get(LocationViewModel.class);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        page = 0;
 
         locationListener = new LocationListener() {
             @Override
@@ -54,7 +73,7 @@ public class LocationActivity extends AppCompatActivity {
                 Log.d("confirm", "경도: " + cur_lon);
 
                 JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("page", 0);
+                jsonObject.addProperty("page", page);
                 jsonObject.addProperty("latitude", cur_lat);
                 jsonObject.addProperty("longitude", cur_lon);
 
@@ -74,6 +93,21 @@ public class LocationActivity extends AppCompatActivity {
             Log.d("confirm", "위치 가져오기");
         }
 
+        binding.nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if(scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()){
+                    page++;
+
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("page", page);
+                    jsonObject.addProperty("latitude", cur_lat);
+                    jsonObject.addProperty("longitude", cur_lon);
+
+                    sendLocationInfo(jsonObject);
+                }
+            }
+        });
 
         // 동네 선택하면 휴대폰 인증 화면 이동
 
@@ -91,8 +125,21 @@ public class LocationActivity extends AppCompatActivity {
             @Override
             public void onChanged(JsonArray jsonElements) {
                 if (!jsonElements.isJsonNull()) {
-                    List<>
-                    Log.d("confirm", jsonElements.get(0).toString());
+                    for(int i = 0; i < jsonElements.size(); i++){
+                        JsonObject jsonObject1 = (JsonObject) jsonElements.get(i);
+
+                        LocationDto data = new LocationDto();
+                        data.setDistrict(jsonObject1.get("district").getAsString());
+                        data.setCity(jsonObject1.get("city").getAsString());
+                        data.setTown(jsonObject1.get("town").getAsString());
+//                        data.setTownship(jsonObject1.get("township").getAsString());
+//                        data.setVillage(jsonObject1.get("village").getAsString());
+
+//                        list.add(data);
+                        adapter.addData(data);
+                    }
+//                    adapter.addData(list);
+                    adapter.notifyDataSetChanged();
                 }
             }
         });

@@ -15,10 +15,10 @@ import retrofit2.Response;
 
 public class LocationRepository {
 
-    public MutableLiveData<JsonArray> dataList =  new MutableLiveData<>();
+    public MutableLiveData<JsonArray> dataList;
 
     public void getLocationResult(JsonObject jsonObject) {
-
+        dataList =  new MutableLiveData<>();
         Call<JsonObject> call = RetrofitClient.api().getLocationResult(jsonObject);
 
         call.enqueue(new Callback<JsonObject>() {

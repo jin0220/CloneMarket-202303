@@ -7,9 +7,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
-        android:padding="10dp"
-        android:layout_marginTop="10dp">
+        android:padding="10dp">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -28,9 +28,9 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#ddd"
+        android:layout_marginHorizontal="10dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginHorizontal="10dp"/>
+        android:background="#ddd" />
 
     <Button
         android:id="@+id/button"
@@ -44,15 +44,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:paddingHorizontal="15dp"
         android:text="근처동네"
-        android:textStyle="bold"
         android:textColor="@color/black"
-        android:paddingHorizontal="10dp"/>
+        android:textStyle="bold" />
 
-    <androidx.recyclerview.widget.RecyclerView
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:textColor="@color/black"/>
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:nestedScrollingEnabled="false"/>
+
+    </androidx.core.widget.NestedScrollView>
+
 
 </LinearLayout>
