@@ -173,7 +173,7 @@ public class LoginPhoneActivity extends AppCompatActivity {
                             if (result) {
                                 Log.d("confirm", "success");
 
-                                Intent intent = new Intent(LoginPhoneActivity.this, MainActivity.class);
+                                Intent intent = new Intent(LoginPhoneActivity.this, ProfileActivity.class);
                                 startActivity(intent);
 
                             } else {

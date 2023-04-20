@@ -11,12 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.example.clonemarket.R;
 import com.example.clonemarket.data.model.LocationDto;
@@ -110,6 +112,14 @@ public class LocationActivity extends AppCompatActivity {
         });
 
         // 동네 선택하면 휴대폰 인증 화면 이동
+        adapter.setOnItemClickListener(new LocationAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position, String userLocation) {
+                Intent intent = new Intent(getApplicationContext(), LoginPhoneActivity.class);
+                intent.putExtra("userLocation", userLocation);
+                startActivity(intent);
+            }
+        });
 
     }
 
