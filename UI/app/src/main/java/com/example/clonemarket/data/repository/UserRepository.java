@@ -9,6 +9,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -72,6 +74,32 @@ public class UserRepository {
             }
         });
 
+    }
+
+    // 프로필 설정
+    public MutableLiveData<Boolean> dataList3 =  new MutableLiveData<>();
+
+    public void setProfile(String nickName, MultipartBody.Part file) {
+        Call<JsonObject> call = RetrofitClient.api().setProfile(nickName, file);
+
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if(response.isSuccessful()){
+                    Log.d("confirm", "setProfile() 응답 성공 -> " + response.body().get("data").toString());
+//                    dataList3.setValue();
+                }
+                else{
+                    Log.d("confirm", "setProfile() 응답 실패");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                t.printStackTrace();
+                Log.d("confirm", "setProfile() 통신 실패");
+            }
+        });
     }
 
 }
