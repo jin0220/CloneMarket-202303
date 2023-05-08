@@ -18,4 +18,21 @@ public class MemberService {
 
         return true;
     }
+
+    public boolean profile(String phoneNum, String nickName, String imgFile){
+        Member member = new Member();
+        member.setPhone(phoneNum);
+        member.setNickName(nickName);
+        member.setProfile(imgFile);
+
+        Member member1 = memberRepository.findUserByPhone(phoneNum);
+        if(member1.getPhone().isEmpty()){
+            memberRepository.save(member);
+        }
+        else {
+
+        }
+
+        return true;
+    }
 }

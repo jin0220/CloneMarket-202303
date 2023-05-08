@@ -1,5 +1,6 @@
 package com.example.toy.controller;
 
+import com.example.toy.dto.ImageDto;
 import com.example.toy.entity.Member;
 import com.example.toy.entity.response.Message;
 import com.example.toy.entity.response.StatusEnum;
@@ -7,12 +8,16 @@ import com.example.toy.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +26,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
 public class MemberController {
+
+    @Value("${file.upload.path}")
+    private String saveDir;
+
     private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     HttpHeaders responseHeaders;
@@ -72,6 +81,65 @@ public class MemberController {
         }
 
         return new ResponseEntity<>(message, responseHeaders, HttpStatus.OK);
+    }
+
+    @PostMapping("/profile")
+    @ResponseBody
+    public ResponseEntity<Message> Profile(
+            @RequestParam("phoneNum") String phoneNum,
+            @RequestParam("nickName") String nickName,
+            @RequestParam("file") MultipartFile file) {
+        log.info(phoneNum);
+        log.info(nickName);
+        log.info(file.getOriginalFilename());
+
+        boolean check = false;
+
+        if(!file.isEmpty()){
+            updateProfile(file);
+            check = memberService.profile(phoneNum, nickName, file.getOriginalFilename());
+            log.info("profile upload");
+        }
+        else {
+            check = memberService.profile(phoneNum, nickName, null);
+            log.info("profile not upload");
+        }
+
+        Message message = new Message();
+        Map<String, Boolean> map = new HashMap<>();
+
+        if(check) {
+            log.info("success");
+            map.put("result", true);
+
+            message.setMessage("success");
+            message.setStatus(StatusEnum.OK);
+            message.setData(map);
+        }
+        else {
+            log.info("fail");
+            map.put("result", false);
+
+            message.setMessage("fail");
+            message.setStatus(StatusEnum.OK);
+            message.setData(map);
+        }
+
+        return new ResponseEntity<>(message, responseHeaders, HttpStatus.OK);
+    }
+
+    public void updateProfile(MultipartFile file) {
+        try {
+            String fileName = file.getOriginalFilename();
+
+            File profile = new File(saveDir, fileName);
+            file.transferTo(profile);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            log.info("fail");
+        }
+
     }
 
 }

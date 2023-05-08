@@ -11,6 +11,10 @@ spring:
     show-sql: true
     properties:
       hibernate.format_sql: true
+  servlet:
+    multipart:
+      maxFileSize: 10MB
+      maxRequestSize: 10MB
 server:
   port: 9090
 logging:
@@ -21,3 +25,6 @@ sms:
   serviceId: ncp:sms:kr:303378693701:clonemarket
   accessKey: hUpV911uJ8qDRF951RYx
   secretKey: 38kGXq9twml9AQDGuHWrLDXt61Cx75Pj9YeHnmhW
+file:
+  upload:
+    path: C:\Users\hhh73\StudioProjects\CloneMarket-202303\API\src\main\resources\static\profile
