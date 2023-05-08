@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel;
 import com.example.clonemarket.data.repository.UserRepository;
 import com.google.gson.JsonObject;
 
+import java.util.Map;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
@@ -25,8 +27,8 @@ public class UserViewModel extends ViewModel {
     }
 
     public MutableLiveData<Boolean> response3 = new MutableLiveData<>();
-    public void setProfile(String nickName, MultipartBody.Part file){
-        repository.setProfile(nickName, file);
+    public void setProfile(Map<String, RequestBody> requestMap, MultipartBody.Part file){
+        repository.setProfile(requestMap, file);
         response3 = repository.dataList3;
     }
 }

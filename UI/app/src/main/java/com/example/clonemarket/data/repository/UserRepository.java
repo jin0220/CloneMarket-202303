@@ -9,6 +9,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.util.Map;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -79,8 +81,8 @@ public class UserRepository {
     // 프로필 설정
     public MutableLiveData<Boolean> dataList3 =  new MutableLiveData<>();
 
-    public void setProfile(String nickName, MultipartBody.Part file) {
-        Call<JsonObject> call = RetrofitClient.api().setProfile(nickName, file);
+    public void setProfile(Map<String, RequestBody> requestMap, MultipartBody.Part file) {
+        Call<JsonObject> call = RetrofitClient.api().setProfile(requestMap, file);
 
         call.enqueue(new Callback<JsonObject>() {
             @Override

@@ -24,6 +24,8 @@ import com.example.clonemarket.databinding.ActivityProfileBinding;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -57,6 +59,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
+        String phoneNum = getIntent().getStringExtra("phoneNum");
+
         binding.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,11 +79,16 @@ public class ProfileActivity extends AppCompatActivity {
                         RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), file);
                         MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", file.getName(), fileBody);
 
-//                RequestBody nickName = RequestBody.create(MediaType.parse("text/plain"), binding.editText.getText().toString());
+                        RequestBody phoneNumBody = RequestBody.create(MediaType.parse("text/plain"), phoneNum);
+                        RequestBody nickNameBody = RequestBody.create(MediaType.parse("text/plain"), binding.editText.getText().toString());
 
-//                viewModel.setProfile(nickName, filePart);
+                        Map<String, RequestBody> requestMap = new HashMap<>();
+                        requestMap.put("phoneNum", phoneNumBody);
+                        requestMap.put("nickName", nickNameBody);
 
-                        viewModel.setProfile(binding.editText.getText().toString(), filePart);
+                        viewModel.setProfile(requestMap, filePart);
+
+//                        viewModel.setProfile(phoneNum, binding.editText.getText().toString(), filePart);
 
                         viewModel.response3.observe(ProfileActivity.this, new Observer<Boolean>() {
                             @Override

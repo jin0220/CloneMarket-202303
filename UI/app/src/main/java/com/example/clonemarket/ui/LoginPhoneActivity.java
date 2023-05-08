@@ -174,6 +174,8 @@ public class LoginPhoneActivity extends AppCompatActivity {
                                 Log.d("confirm", "success");
 
                                 Intent intent = new Intent(LoginPhoneActivity.this, ProfileActivity.class);
+//                                intent.putExtra("phoneNum", editTextPhone.getText());
+                                intent.putExtra("phoneNum", "01054872338");
                                 startActivity(intent);
 
                             } else {
