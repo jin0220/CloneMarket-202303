@@ -3,7 +3,7 @@ package com.example.clonemarket.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class PreferenceManger {
+public class PreferenceManager {
     public static final String PREFERENCES_NAME = "rebuild_preference";
 
 

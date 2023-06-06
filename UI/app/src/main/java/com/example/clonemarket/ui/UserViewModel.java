@@ -20,7 +20,7 @@ public class UserViewModel extends ViewModel {
         response = repository.dataList;
     }
 
-    public MutableLiveData<Boolean> response2 = new MutableLiveData<>();
+    public MutableLiveData<String> response2 = new MutableLiveData<>();
     public void getLoginResult(JsonObject jsonObject) {
         repository.getLoginResult(jsonObject);
         response2 = repository.dataList2;

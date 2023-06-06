@@ -7,12 +7,12 @@ import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.clonemarket.R;
-import com.example.clonemarket.data.model.LocationDto;
+import com.example.clonemarket.data.PreferenceManager;
 import com.example.clonemarket.data.model.PostDto;
 import com.example.clonemarket.databinding.FragmentHomeBinding;
 import com.google.gson.JsonArray;
@@ -40,8 +40,10 @@ public class HomeFragment extends Fragment {
         page = 0;
 
         viewModel = new PostViewModel();
+        String accessToken = PreferenceManager.getString(getContext(), "accessToken");
+        Log.d("confirm", accessToken);
 
-        viewModel.getPost(page);
+        viewModel.getPost(accessToken, page);
 
         viewModel.response.observe(getViewLifecycleOwner(), new Observer<JsonArray>() {
             @Override
@@ -80,7 +82,7 @@ public class HomeFragment extends Fragment {
                 if(scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()){
                     page++;
 
-                    viewModel.getPost(page);
+                    viewModel.getPost(accessToken, page);
                 }
             }
         });

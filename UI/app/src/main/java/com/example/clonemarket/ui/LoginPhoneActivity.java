@@ -18,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.clonemarket.R;
-import com.google.gson.JsonElement;
+import com.example.clonemarket.data.PreferenceManager;
 import com.google.gson.JsonObject;
 
 import java.util.Timer;
@@ -33,6 +33,8 @@ public class LoginPhoneActivity extends AppCompatActivity {
 
     UserViewModel viewModel;
     String responseAuthNum;
+
+    String phoneNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,8 +116,10 @@ public class LoginPhoneActivity extends AppCompatActivity {
 
                 timer.schedule(timerTask, 0, 1000); //Timer 실행
 
+                phoneNum = editTextPhone.getText().toString();
+
                 JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("phoneNum", editTextPhone.getText().toString());
+                jsonObject.addProperty("phoneNum", phoneNum);
                 jsonObject.addProperty("content", "test");
 
                 viewModel.getAuthNumResult(jsonObject);
@@ -163,19 +167,22 @@ public class LoginPhoneActivity extends AppCompatActivity {
                 if (editTextAuthNum.getText().toString().equals(responseAuthNum)) {
 
                     JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("phoneNum", editTextPhone.getText().toString());
+                    jsonObject.addProperty("phoneNum", phoneNum);
 
                     viewModel.getLoginResult(jsonObject);
 
-                    viewModel.response2.observe(LoginPhoneActivity.this, new Observer<Boolean>() {
+                    viewModel.response2.observe(LoginPhoneActivity.this, new Observer<String>() {
                         @Override
-                        public void onChanged(Boolean result) {
-                            if (result) {
+                        public void onChanged(String result) {
+                            if (!result.isEmpty()) {
                                 Log.d("confirm", "success");
+
+                                PreferenceManager.setString(getApplicationContext(), "accessToken", result);
+                                PreferenceManager.setString(getApplicationContext(), "phoneNum", phoneNum);
 
                                 Intent intent = new Intent(LoginPhoneActivity.this, ProfileActivity.class);
 //                                intent.putExtra("phoneNum", editTextPhone.getText());
-                                intent.putExtra("phoneNum", "01054872338");
+                                intent.putExtra("phoneNum", phoneNum);
                                 startActivity(intent);
 
                             } else {

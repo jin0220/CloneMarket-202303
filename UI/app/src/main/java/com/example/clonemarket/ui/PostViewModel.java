@@ -11,8 +11,8 @@ public class PostViewModel extends ViewModel {
     private static PostRepository repository = new PostRepository();
 
     public MutableLiveData<JsonArray> response = new MutableLiveData<>();
-    public void getPost(int page) {
-        repository.getPostResult(page);
+    public void getPost(String accessToken, int page) {
+        repository.getPostResult(accessToken, page);
         response = repository.dataListArr;
     }
 

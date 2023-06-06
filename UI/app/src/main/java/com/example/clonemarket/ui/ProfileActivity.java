@@ -95,6 +95,8 @@ public class ProfileActivity extends AppCompatActivity {
                             public void onChanged(Boolean result) {
                                 if (result) {
                                     Log.d("confirm", "success");
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    startActivity(intent);
                                 } else {
                                     Log.d("confirm", "fail");
                                 }

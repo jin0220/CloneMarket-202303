@@ -20,10 +20,13 @@ public class PostRepository {
 
     public MutableLiveData<JsonArray> dataListArr;
 
-    public void getPostResult(int page) {
-        dataListArr = new MutableLiveData<>();
+    RetrofitClient retrofitClient;
 
-        Call<JsonObject> call = RetrofitClient.api().getPostResult(page);
+    public void getPostResult(String accessToken, int page) {
+        dataListArr = new MutableLiveData<>();
+        retrofitClient = new RetrofitClient(accessToken);
+
+        Call<JsonObject> call = retrofitClient.api().getPostResult(page);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

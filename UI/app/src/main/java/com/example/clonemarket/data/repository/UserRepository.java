@@ -51,7 +51,7 @@ public class UserRepository {
     }
 
 
-    public MutableLiveData<Boolean> dataList2 =  new MutableLiveData<>();
+    public MutableLiveData<String> dataList2 =  new MutableLiveData<>();
 
     public void getLoginResult(JsonObject jsonObject){
 
@@ -62,7 +62,7 @@ public class UserRepository {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful()){
                     Log.d("confirm", "getLoginResult() 응답 성공 ->" + response.body().get("data").getAsJsonObject().get("result"));
-                    dataList2.setValue(response.body().get("data").getAsJsonObject().get("result").getAsBoolean());
+                    dataList2.setValue(response.body().get("data").getAsJsonObject().get("result").getAsString());
                 }
                 else{
                     Log.d("confirm", "getLoginResult() 응답 실패");
@@ -89,7 +89,7 @@ public class UserRepository {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if(response.isSuccessful()){
                     Log.d("confirm", "setProfile() 응답 성공 -> " + response.body().get("data").toString());
-//                    dataList3.setValue();
+                    dataList3.setValue(response.body().get("data").getAsJsonObject().get("result").getAsBoolean());
                 }
                 else{
                     Log.d("confirm", "setProfile() 응답 실패");
