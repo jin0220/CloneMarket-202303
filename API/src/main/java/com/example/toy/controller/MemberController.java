@@ -1,9 +1,11 @@
 package com.example.toy.controller;
 
+import com.example.toy.configuration.JwtTokenProvider;
 import com.example.toy.dto.ImageDto;
 import com.example.toy.entity.Member;
 import com.example.toy.entity.response.Message;
 import com.example.toy.entity.response.StatusEnum;
+import com.example.toy.service.AuthService;
 import com.example.toy.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -35,6 +37,8 @@ public class MemberController {
     HttpHeaders responseHeaders;
 
     private final MemberService memberService;
+    private final AuthService authService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @PostConstruct
     public void init() {
@@ -58,14 +62,22 @@ public class MemberController {
     @PostMapping("/login")
     @ResponseBody
     public ResponseEntity<Message> login(@RequestBody HashMap<String, Object> param) {
-        boolean check = memberService.login(param.get("phoneNum").toString());
+        String phone = param.get("phoneNum").toString();
+        boolean check = memberService.login(phone);
 
-        Map<String, Boolean> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         Message message = new Message();
 
         if(check) {
+            // 1. accessToken과 refreshToken를 생성한다.
+            String accessToken = jwtTokenProvider.createToken(phone);
+            String refreshToken = jwtTokenProvider.createRefreshToken(phone);
+
+            // 2. refreshToken은 DB에 저장한다. 유효하지 않은 accessToken으로 요청이 왔을 때 처리하기 위한 토근.
+            authService.updateRefreshToken(refreshToken, phone);
+
             log.info("success");
-            map.put("result", true);
+            map.put("result", accessToken);
 
             message.setMessage("success");
             message.setStatus(StatusEnum.OK);
@@ -73,7 +85,7 @@ public class MemberController {
         }
         else {
             log.info("fail");
-            map.put("result", false);
+            map.put("result", null);
 
             message.setMessage("fail");
             message.setStatus(StatusEnum.OK);

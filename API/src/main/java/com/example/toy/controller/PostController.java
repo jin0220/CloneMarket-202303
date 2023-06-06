@@ -8,6 +8,8 @@ import com.example.toy.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,10 +38,10 @@ public class PostController {
         responseHeaders.add("Content-Type", "application/json; charset=UTF-8");
     }
 
-    @GetMapping("/posts/{page}")
+    @GetMapping("/posts")
     @ResponseBody
-    public ResponseEntity<Message> getPost(@PathVariable("page") int page) {
-        log.info("connect => " + page);
+    public ResponseEntity<Message> getPost(@Param("page") int page) {
+        log.info("connect => " + "    " +page);
         List<Post> postList = postService.getPost();
 
         Map<String, List<Post>> map = new HashMap<>();

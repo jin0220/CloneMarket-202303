@@ -15,6 +15,8 @@ spring:
     multipart:
       maxFileSize: 10MB
       maxRequestSize: 10MB
+  jwt:
+    secret: HRlELXqpSB
 server:
   port: 9090
 logging:

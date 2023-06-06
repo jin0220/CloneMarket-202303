@@ -36,6 +36,12 @@ dependencies {
 	// https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload
 	implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
 
+	// security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+
+	// jwt
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 }
 
 tasks.named('test') {
