@@ -2,6 +2,16 @@ package com.example.clonemarket.data.model;
 
 public class PostDto {
     private String num;
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    private String nickName;
     private String title;
     private String content;
     private String town;

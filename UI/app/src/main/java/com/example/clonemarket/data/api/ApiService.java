@@ -50,4 +50,8 @@ public interface ApiService {
     @POST("/api/v1/post")
     Call<JsonObject> setPost(@Body JsonObject jsonObject);
 
+    @Headers("Content-Type: application/json")
+    @GET("/api/v1/postDetail")
+    Call<JsonObject> getPostDetailResult(@Query("postNum") String postNum);
+
 }

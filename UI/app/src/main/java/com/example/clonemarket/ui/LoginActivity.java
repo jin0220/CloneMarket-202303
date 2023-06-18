@@ -36,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplication(), LoginPhoneActivity.class);
+                intent.putExtra("pathChk", "login");
                 startActivity(intent);
             }
         });

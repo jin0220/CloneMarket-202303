@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.clonemarket.R;
+import com.example.clonemarket.data.PreferenceManager;
 import com.example.clonemarket.data.model.PostDto;
 import com.example.clonemarket.databinding.ActivityLocationBinding;
 import com.example.clonemarket.databinding.ActivityWritePostBinding;
@@ -78,6 +79,7 @@ public class WritePostActivity extends AppCompatActivity {
 
         Log.d("confirm", binding.title.getText().toString());
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("phoneNum", PreferenceManager.getString(getApplicationContext(),"phoneNum"));
         jsonObject.addProperty("title", binding.title.getText().toString());
         jsonObject.addProperty("content", binding.content.getText().toString());
         jsonObject.addProperty("price", binding.price.getText().toString());

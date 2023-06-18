@@ -50,6 +50,8 @@ public class LoginPhoneActivity extends AppCompatActivity {
         editTextAuthNum = findViewById(R.id.editTextAuthNum);
         confirm = findViewById(R.id.button3);
 
+        String pathChk = getIntent().getStringExtra("pathChk");
+
 
         editTextPhone.addTextChangedListener(new TextWatcher() {
             @Override
@@ -180,10 +182,16 @@ public class LoginPhoneActivity extends AppCompatActivity {
                                 PreferenceManager.setString(getApplicationContext(), "accessToken", result);
                                 PreferenceManager.setString(getApplicationContext(), "phoneNum", phoneNum);
 
-                                Intent intent = new Intent(LoginPhoneActivity.this, ProfileActivity.class);
+                                if(pathChk.equals("login")){
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    startActivity(intent);
+                                }
+                                else {
+                                    Intent intent = new Intent(LoginPhoneActivity.this, ProfileActivity.class);
 //                                intent.putExtra("phoneNum", editTextPhone.getText());
-                                intent.putExtra("phoneNum", phoneNum);
-                                startActivity(intent);
+                                    intent.putExtra("phoneNum", phoneNum);
+                                    startActivity(intent);
+                                }
 
                             } else {
                                 Log.d("confirm", "fail");

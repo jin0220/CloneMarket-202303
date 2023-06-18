@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.clonemarket.data.repository.PostRepository;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class PostViewModel extends ViewModel {
@@ -20,6 +21,12 @@ public class PostViewModel extends ViewModel {
     public void setPost(JsonObject jsonObject) {
         repository.setPost(jsonObject);
         response2 = repository.dataList1;
+    }
+
+    public MutableLiveData<JsonElement> response3 = new MutableLiveData<>();
+    public void getPostDetailResult(String accessToken, String postNum) {
+        repository.getPostDetailResult(accessToken, postNum);
+        response3 = repository.dataList2;
     }
 }
 

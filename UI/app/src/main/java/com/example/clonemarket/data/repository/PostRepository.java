@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.clonemarket.data.api.RetrofitClient;
 import com.example.clonemarket.data.model.PostDto;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -20,13 +21,13 @@ public class PostRepository {
 
     public MutableLiveData<JsonArray> dataListArr;
 
-    RetrofitClient retrofitClient;
+//    RetrofitClient retrofitClient;
 
     public void getPostResult(String accessToken, int page) {
         dataListArr = new MutableLiveData<>();
-        retrofitClient = new RetrofitClient(accessToken);
+//        retrofitClient = new RetrofitClient(accessToken);
 
-        Call<JsonObject> call = retrofitClient.api().getPostResult(page);
+        Call<JsonObject> call = RetrofitClient.api().getPostResult(page);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -94,6 +95,37 @@ public class PostRepository {
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 t.printStackTrace();
                 Log.d("confirm", "setPost() 통신 실패");
+            }
+        });
+
+    }
+
+    public MutableLiveData<JsonElement> dataList2;
+    public void getPostDetailResult(String accessToken, String postNum) {
+        dataList2 = new MutableLiveData<>();
+//        retrofitClient = new RetrofitClient(accessToken);
+
+        Call<JsonObject> call = RetrofitClient.api().getPostDetailResult(postNum);
+
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if(response.isSuccessful()){
+
+                    Log.d("confirm", "getPostDetailResult() 응답 성공 ->" + response.body().get("data").getAsJsonObject().get("dataList").toString());
+
+                    dataList2.setValue(response.body().get("data").getAsJsonObject().get("dataList"));
+                }
+                else {
+//                    dataList1.setValue(false);
+                    Log.d("confirm", "getPostDetailResult() 응답 실패");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                t.printStackTrace();
+                Log.d("confirm", "getPostDetailResult() 통신 실패");
             }
         });
 
