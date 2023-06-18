@@ -1,5 +1,6 @@
 package com.example.toy.controller;
 
+import com.example.toy.entity.Member;
 import com.example.toy.entity.Post;
 import com.example.toy.entity.response.Message;
 import com.example.toy.entity.response.StatusEnum;
@@ -26,6 +27,7 @@ import java.util.Map;
 @RequestMapping("/api/v1")
 public class PostController {
     private final PostService postService;
+    private final MemberService memberService;
 
     private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
@@ -47,22 +49,22 @@ public class PostController {
         Map<String, List<Post>> map = new HashMap<>();
         Message message = new Message();
 
-        if(!postList.isEmpty()) {
+//        if(!postList.isEmpty()) {
             log.info("success" + postList.get(0).getTime());
             map.put("dataList", postList);
 
             message.setMessage("success");
             message.setStatus(StatusEnum.OK);
             message.setData(map);
-        }
-        else {
-            log.info("fail");
-            map.put("dataList", null);
-
-            message.setMessage("fail");
-            message.setStatus(StatusEnum.OK);
-            message.setData(map);
-        }
+//        }
+//        else {
+//            log.info("fail");
+//            map.put("dataList", null);
+//
+//            message.setMessage("fail");
+//            message.setStatus(StatusEnum.OK);
+//            message.setData(map);
+//        }
 
         return new ResponseEntity<>(message, responseHeaders, HttpStatus.OK);
     }
@@ -73,11 +75,16 @@ public class PostController {
         log.info(param.get("title").toString());
 
         Post post = new Post();
+        post.setPhoneNum(param.get("phoneNum").toString());
         post.setTitle(param.get("title").toString());
         post.setContent(param.get("content").toString());
         post.setPrice(param.get("price").toString());
         post.setDate(param.get("date").toString());
         post.setTime(param.get("time").toString());
+
+        Member member = memberService.getMemberInfo(param.get("phoneNum").toString());
+
+        post.setNickName(member.getNickName());
 
         boolean check = postService.setPost(post);
 
@@ -95,6 +102,35 @@ public class PostController {
         else {
             log.info("fail");
             map.put("result", false);
+
+            message.setMessage("fail");
+            message.setStatus(StatusEnum.OK);
+            message.setData(map);
+        }
+
+        return new ResponseEntity<>(message, responseHeaders, HttpStatus.OK);
+    }
+
+    @GetMapping("/postDetail")
+    @ResponseBody
+    public ResponseEntity<Message> getPostDetail(@Param("postNum") String postNum) {
+        log.info("connect getPostDetail => " + "    " +postNum);
+        Post post = postService.getPostDetail(Long.parseLong(postNum));
+
+        Map<String, Post> map = new HashMap<>();
+        Message message = new Message();
+
+        if(!post.equals(null)) {
+            log.info("success" + post);
+            map.put("dataList", post);
+
+            message.setMessage("success");
+            message.setStatus(StatusEnum.OK);
+            message.setData(map);
+        }
+        else {
+            log.info("fail");
+            map.put("dataList", null);
 
             message.setMessage("fail");
             message.setStatus(StatusEnum.OK);

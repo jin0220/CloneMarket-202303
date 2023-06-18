@@ -2,6 +2,7 @@ package com.example.toy.interceptor;
 
 import com.example.toy.configuration.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 

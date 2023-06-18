@@ -14,7 +14,7 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long num;
-    private String userNum;
+    private String phoneNum;
     private String nickName;
     private String title;
     private String content;

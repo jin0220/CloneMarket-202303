@@ -22,4 +22,7 @@ public class PostService {
         return true;
     }
 
+    public Post getPostDetail(Long postNum) {
+        return postRepository.findPostByNum(postNum);
+    }
 }
