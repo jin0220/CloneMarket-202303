@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CloneMarket">
-        <activity android:name=".ui.PostDetailActivity"></activity>
+        <activity android:name=".ui.ChatActivity"></activity>
+        <activity android:name=".ui.PostDetailActivity" />
         <activity android:name=".ui.WritePostActivity" />
         <activity android:name=".ui.ProfileActivity" />
         <activity android:name=".ui.LocationActivity" />
@@ -26,19 +27,19 @@
             android:name=".ui.SplashActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
 
-             <intent-filter>
-             <action android:name="android.intent.action.MAIN" />
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
 
 
-             <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".ui.MainActivity">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

@@ -19,11 +19,14 @@ import retrofit2.Response;
 
 public class UserRepository {
 
+    RetrofitClient retrofitClient;
+
+    // 인증번호
     public MutableLiveData<JsonObject> dataList =  new MutableLiveData<>();
-
     public void getAuthNumResult(JsonObject jsonObject) {
+        retrofitClient = new RetrofitClient();
 
-        Call<JsonObject> call = RetrofitClient.api().getAuthNumResult(jsonObject);
+        Call<JsonObject> call = retrofitClient.api().getAuthNumResult(jsonObject);
 
         call.enqueue(new Callback<JsonObject>() {
             @Override
@@ -50,12 +53,11 @@ public class UserRepository {
 
     }
 
-
+    // 로그인
     public MutableLiveData<String> dataList2 =  new MutableLiveData<>();
-
     public void getLoginResult(JsonObject jsonObject){
-
-        Call<JsonObject> call = RetrofitClient.api().getLoginResult(jsonObject);
+        retrofitClient = new RetrofitClient();
+        Call<JsonObject> call = retrofitClient.api().getLoginResult(jsonObject);
 
         call.enqueue(new Callback<JsonObject>() {
             @Override
@@ -80,9 +82,9 @@ public class UserRepository {
 
     // 프로필 설정
     public MutableLiveData<Boolean> dataList3 =  new MutableLiveData<>();
-
     public void setProfile(Map<String, RequestBody> requestMap, MultipartBody.Part file) {
-        Call<JsonObject> call = RetrofitClient.api().setProfile(requestMap, file);
+        retrofitClient = new RetrofitClient();
+        Call<JsonObject> call = retrofitClient.api().setProfile(requestMap, file);
 
         call.enqueue(new Callback<JsonObject>() {
             @Override

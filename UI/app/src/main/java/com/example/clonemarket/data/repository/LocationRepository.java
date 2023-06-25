@@ -17,9 +17,12 @@ public class LocationRepository {
 
     public MutableLiveData<JsonArray> dataList;
 
+    RetrofitClient retrofitClient;
+
     public void getLocationResult(JsonObject jsonObject) {
         dataList =  new MutableLiveData<>();
-        Call<JsonObject> call = RetrofitClient.api().getLocationResult(jsonObject);
+        retrofitClient = new RetrofitClient();
+        Call<JsonObject> call = retrofitClient.api().getLocationResult(jsonObject);
 
         call.enqueue(new Callback<JsonObject>() {
             @Override

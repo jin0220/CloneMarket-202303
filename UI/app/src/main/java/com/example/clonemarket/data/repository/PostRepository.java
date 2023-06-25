@@ -21,13 +21,14 @@ public class PostRepository {
 
     public MutableLiveData<JsonArray> dataListArr;
 
-//    RetrofitClient retrofitClient;
+    RetrofitClient retrofitClient;
 
     public void getPostResult(String accessToken, int page) {
         dataListArr = new MutableLiveData<>();
-//        retrofitClient = new RetrofitClient(accessToken);
+        retrofitClient = new RetrofitClient(accessToken);
+        Log.d("confirm", "getPostResult() 토큰 ->" + accessToken);
 
-        Call<JsonObject> call = RetrofitClient.api().getPostResult(page);
+        Call<JsonObject> call = retrofitClient.api().getPostResult(page);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -71,12 +72,12 @@ public class PostRepository {
 //        });
     }
 
-
+    //포스트 게시
     public MutableLiveData<Boolean> dataList1;
     public void setPost(JsonObject jsonObject) {
         dataList1 =  new MutableLiveData<>();
-
-        Call<JsonObject> call = RetrofitClient.api().setPost(jsonObject);
+        retrofitClient = new RetrofitClient();
+        Call<JsonObject> call = retrofitClient.api().setPost(jsonObject);
 
         call.enqueue(new Callback<JsonObject>() {
             @Override
@@ -103,7 +104,7 @@ public class PostRepository {
     public MutableLiveData<JsonElement> dataList2;
     public void getPostDetailResult(String accessToken, String postNum) {
         dataList2 = new MutableLiveData<>();
-//        retrofitClient = new RetrofitClient(accessToken);
+        retrofitClient = new RetrofitClient(accessToken);
 
         Call<JsonObject> call = RetrofitClient.api().getPostDetailResult(postNum);
 

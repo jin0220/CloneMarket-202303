@@ -5,8 +5,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.example.clonemarket.R;
 import com.example.clonemarket.data.PreferenceManager;
@@ -31,8 +33,6 @@ public class PostDetailActivity extends AppCompatActivity {
 
         String postNum = getIntent().getStringExtra("postNum");
 
-
-
         viewModel.getPostDetailResult(PreferenceManager.getString(this, "accessToken"), postNum);
 
         viewModel.response3.observe(this, new Observer<JsonElement>() {
@@ -44,6 +44,14 @@ public class PostDetailActivity extends AppCompatActivity {
                     binding.content.setText(jsonElement.getAsJsonObject().get("content").toString());
                     binding.location.setText(jsonElement.getAsJsonObject().get("location").toString());
                 }
+            }
+        });
+
+        binding.chatBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                startActivity(intent);
             }
         });
 
