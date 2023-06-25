@@ -85,6 +85,7 @@ public class PostController {
         Member member = memberService.getMemberInfo(param.get("phoneNum").toString());
 
         post.setNickName(member.getNickName());
+        post.setProfile(member.getProfile());
 
         boolean check = postService.setPost(post);
 

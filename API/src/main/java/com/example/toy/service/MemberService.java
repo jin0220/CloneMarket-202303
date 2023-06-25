@@ -3,6 +3,7 @@ package com.example.toy.service;
 import com.example.toy.entity.Member;
 import com.example.toy.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -44,7 +45,16 @@ public class MemberService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+    public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
+        Member member = memberRepository.findUserByPhone(phone);
+
+        if(member == null)
+            new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
+
+        return User.builder()
+                .username(member.getPhone())
+                .password("")
+                .roles("")
+                .build();
     }
 }

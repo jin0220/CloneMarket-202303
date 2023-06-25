@@ -31,6 +31,9 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
             System.out.println("valid Access Token.");
             return true;
         }
+        else if(accessToken != null){
+            System.out.println("Invalid Access Token.");
+        }
 
         response.setStatus(401);
         response.setHeader("ACCESS_TOKEN", accessToken);

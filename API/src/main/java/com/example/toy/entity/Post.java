@@ -16,6 +16,7 @@ public class Post {
     private Long num;
     private String phoneNum;
     private String nickName;
+    private String profile;
     private String title;
     private String content;
     private String date;
