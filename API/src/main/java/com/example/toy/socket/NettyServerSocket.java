@@ -1,6 +1,7 @@
 package com.example.toy.socket;
 
 import com.example.toy.handler.Handler;
+import com.example.toy.service.ChatService;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -21,12 +22,14 @@ import java.net.InetSocketAddress;
 public class NettyServerSocket {
     private final int port = 9091;
 
+    private final ChatService chatService;
+
     public void start(){
         EventLoopGroup group = new NioEventLoopGroup();
 
         ServerBootstrap b = new ServerBootstrap();
 
-        final Handler serverHandler = new Handler();
+        final Handler serverHandler = new Handler(chatService);
 
         b.group(group)
                 .channel(NioServerSocketChannel.class)

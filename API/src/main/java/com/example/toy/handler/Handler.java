@@ -1,21 +1,35 @@
 package com.example.toy.handler;
 
 
+import com.example.toy.entity.Chat;
+import com.example.toy.service.ChatService;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
+import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.util.CharsetUtil;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 @ChannelHandler.Sharable // 여러 채널에서 핸들러를 공유할 수 있음
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class Handler extends ChannelInboundHandlerAdapter {
     private int DATA_LENGTH = 2048;
     private ByteBuf buff;
+
+    private final ChatService chatService;
+
+    @Autowired
+    public Handler(ChatService chatService) {
+        this.chatService = chatService;
+    }
 
     private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
@@ -55,10 +69,26 @@ public class Handler extends ChannelInboundHandlerAdapter {
      * @param msg
      */
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws ParseException {
         ByteBuf mBuf = (ByteBuf) msg;
-        System.out.println("Server received [" + mBuf.toString(CharsetUtil.UTF_8) + "]");
+        String jsonData = mBuf.toString(CharsetUtil.UTF_8);
+        System.out.println("Server received [" + jsonData + "]");
         //ctx.writeAndFlush(mBuf);
+
+        // JSON 데이터 파싱하여 객체 생성
+        JSONParser parser = new JSONParser();
+        Object obj = parser.parse(jsonData);
+        JSONObject jsonObj = (JSONObject)obj;
+        String phoneNum = jsonObj.get("phoneNum").toString();
+        String message = jsonObj.get("message").toString();
+
+        System.out.println("phoneNum = " + phoneNum);
+        System.out.println("message = " + message);
+
+        Chat chat = new Chat(phoneNum, "test", message);
+
+        chatService.setChat(chat);
+
     }
 
     @Override
