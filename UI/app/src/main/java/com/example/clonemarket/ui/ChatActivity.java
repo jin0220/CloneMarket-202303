@@ -7,8 +7,12 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.clonemarket.R;
+import com.example.clonemarket.data.PreferenceManager;
 import com.example.clonemarket.databinding.ActivityChatBinding;
 
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.InetSocketAddress;
 import java.net.URI;
@@ -39,7 +43,7 @@ public class ChatActivity extends AppCompatActivity {
 
     ChatAdapter adapter;
 
-    private static final String HOST = "192.168.35.224"; // 노트북의 로컬 주소
+    private static final String HOST = "192.168.35.117"; // 노트북의 로컬 주소
     private static final int PORT = 9091;
 
     private EventLoopGroup group;
@@ -119,31 +123,41 @@ public class ChatActivity extends AppCompatActivity {
     private void sendMessageToServer() {
         if (channel != null && channel.isActive()) {
             String message = binding.content.getText().toString();
-            ByteBuf data = Unpooled.copiedBuffer(message, CharsetUtil.UTF_8);
+
+            // JSON 형식으로 사용자 정보와 메시지를 함께 전송
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("phoneNum", PreferenceManager.getString(this, "phoneNum"));
+                jsonObject.put("message", message);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            ByteBuf data = Unpooled.copiedBuffer(jsonObject.toString(), CharsetUtil.UTF_8);
             channel.writeAndFlush(data);
         }
     }
 
-    public void createRequest(String host, int port, String url) throws Exception {
-//        String content = "{\"host\":" + objectToJsonString + "}";	// body 데이터
-
-        URI uri = new URI("https://b023-218-236-76-214.ngrok-free.app" + "/api/v1/chat");
-        HttpRequest request = null;
-        HttpPostRequestEncoder postRequestEncoder = null;
-
-        request = new DefaultFullHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.POST, uri.getRawPath()); // http의 header와 body를 직접 정의
-
-        request.headers().set(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.APPLICATION_JSON);
-        request.headers().set(HttpHeaderNames.HOST, host + ":" + port);
-        request.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
-
-        postRequestEncoder = new HttpPostRequestEncoder(request, false); // post방식의 경우 요청 파라미터가 url에 명시되지 않기 때문에 postRequestEncoder를 통해 지정가능
-        postRequestEncoder.addBodyAttribute("url", url);
-        request=postRequestEncoder.finalizeRequest();
-        postRequestEncoder.close();
-
-        future.channel().writeAndFlush(request);
-    }
+//    public void createRequest(String host, int port, String url) throws Exception {
+////        String content = "{\"host\":" + objectToJsonString + "}";	// body 데이터
+//
+//        URI uri = new URI("https://b023-218-236-76-214.ngrok-free.app" + "/api/v1/chat");
+//        HttpRequest request = null;
+//        HttpPostRequestEncoder postRequestEncoder = null;
+//
+//        request = new DefaultFullHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.POST, uri.getRawPath()); // http의 header와 body를 직접 정의
+//
+//        request.headers().set(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.APPLICATION_JSON);
+//        request.headers().set(HttpHeaderNames.HOST, host + ":" + port);
+//        request.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
+//
+//        postRequestEncoder = new HttpPostRequestEncoder(request, false); // post방식의 경우 요청 파라미터가 url에 명시되지 않기 때문에 postRequestEncoder를 통해 지정가능
+//        postRequestEncoder.addBodyAttribute("url", url);
+//        request=postRequestEncoder.finalizeRequest();
+//        postRequestEncoder.close();
+//
+//        future.channel().writeAndFlush(request);
+//    }
 
     @Override
     protected void onDestroy() {
