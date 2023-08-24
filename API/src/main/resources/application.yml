@@ -4,14 +4,14 @@ spring:
     url: jdbc:mysql://localhost:3306/easyfarm?serverTimezone=Asia/Seoul
     username: user1
     password: 1234
-  data:
-    mongodb:
-      host: localhost
-      port: 27017
-      authentication-database: admin
-      username: root
-      password: 1234
-      database: CloneMarket
+#  data:
+#    mongodb:
+#      host: localhost
+#      port: 27017
+#      authentication-database: CloneMarket
+#      username: test
+#      password: 1234
+#      database: CloneMarket
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
@@ -39,3 +39,5 @@ sms:
 file:
   upload:
     path: C:\Users\hhh73\StudioProjects\CloneMarket-202303\API\src\main\resources\static\profile
+security:
+  authorization: 'enabled'

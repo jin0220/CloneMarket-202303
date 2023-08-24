@@ -1,14 +1,11 @@
 package com.example.toy.handler;
 
 
-import com.example.toy.entity.Chat;
+import com.example.toy.entity.ChattingRoom;
 import com.example.toy.service.ChatService;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
-import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.util.CharsetUtil;
-import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -85,9 +82,9 @@ public class Handler extends ChannelInboundHandlerAdapter {
         System.out.println("phoneNum = " + phoneNum);
         System.out.println("message = " + message);
 
-        Chat chat = new Chat(phoneNum, "test", message);
+        ChattingRoom chattingRoom = new ChattingRoom();
 
-        chatService.setChat(chat);
+        chatService.setChat(chattingRoom);
 
     }
 
