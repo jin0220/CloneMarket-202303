@@ -1,6 +1,7 @@
 package com.example.clonemarket.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -8,7 +9,11 @@ import android.view.View;
 
 import com.example.clonemarket.R;
 import com.example.clonemarket.data.PreferenceManager;
+import com.example.clonemarket.data.model.ChatDto;
+import com.example.clonemarket.data.model.PostDto;
 import com.example.clonemarket.databinding.ActivityChatBinding;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 
 import org.json.JSONException;
@@ -43,13 +48,17 @@ public class ChatActivity extends AppCompatActivity {
 
     ChatAdapter adapter;
 
-    private static final String HOST = "192.168.35.117"; // 노트북의 로컬 주소
+    private static final String HOST = "192.168.35.213"; // 노트북의 로컬 주소
     private static final int PORT = 9091;
 
     private EventLoopGroup group;
     private Channel channel;
 
     ChannelFuture future;
+
+    ChatViewModel viewModel;
+
+    String postNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +69,10 @@ public class ChatActivity extends AppCompatActivity {
 
         adapter = new ChatAdapter();
         binding.recyclerView.setAdapter(adapter);
+
+        viewModel = new ChatViewModel();
+
+        postNum = getIntent().getStringExtra("postNum");
 
         group = new NioEventLoopGroup();
 
@@ -101,6 +114,31 @@ public class ChatActivity extends AppCompatActivity {
             Log.d("confirm","Chat fail");
             e.printStackTrace();
         }
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("postNum", postNum);
+        jsonObject.addProperty("phoneNum", PreferenceManager.getString(getApplicationContext(),"phoneNum"));
+        viewModel.getChattingRoom(jsonObject);
+
+        viewModel.response.observe(ChatActivity.this, new Observer<JsonArray>() {
+            @Override
+            public void onChanged(JsonArray jsonElements) {
+                if(!jsonElements.isJsonNull()){
+                    for(int i = 0; i < jsonElements.size(); i++) {
+                        JsonObject jsonObject1 = (JsonObject) jsonElements.get(i);
+
+                        ChatDto data = new ChatDto();
+                        data.setNickName(jsonObject1.get("userPhone").getAsInt() + "");
+                        data.setContent(jsonObject1.get("contents").getAsString());
+                        data.setTime(jsonObject1.get("sendTime").getAsString());
+
+                        Log.d("confirm","Chat " + data);
+//                        adapter.addData(data);
+                    }
+                }
+//                adapter.notifyDataSetChanged();
+            }
+        });
 
         binding.submit.setOnClickListener(new View.OnClickListener() {
             @Override

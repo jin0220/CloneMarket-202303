@@ -51,6 +51,7 @@ public class PostDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                intent.putExtra("postNum", postNum);
                 startActivity(intent);
             }
         });
