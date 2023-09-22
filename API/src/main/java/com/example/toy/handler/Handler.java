@@ -1,6 +1,7 @@
 package com.example.toy.handler;
 
 
+import com.example.toy.entity.ChattingContent;
 import com.example.toy.entity.ChattingRoom;
 import com.example.toy.service.ChatService;
 import io.netty.buffer.ByteBuf;
@@ -76,15 +77,53 @@ public class Handler extends ChannelInboundHandlerAdapter {
         JSONParser parser = new JSONParser();
         Object obj = parser.parse(jsonData);
         JSONObject jsonObj = (JSONObject)obj;
-        String phoneNum = jsonObj.get("phoneNum").toString();
+        String buyerUser = jsonObj.get("buyerUser").toString();
         String message = jsonObj.get("message").toString();
-
-        System.out.println("phoneNum = " + phoneNum);
-        System.out.println("message = " + message);
+        String postNum = null;
+        String time = jsonObj.get("time").toString();
+        String roomId = null;
+        String sellerUser = null;
 
         ChattingRoom chattingRoom = new ChattingRoom();
 
-        chatService.setChat(chattingRoom);
+        ChattingContent chattingContent = new ChattingContent();
+
+        if(jsonObj.containsKey("roomId")){
+            System.out.println("contain");
+            roomId = jsonObj.get("roomId").toString();
+            chattingContent.setRoomId(Long.parseLong(roomId));
+//            chattingContent.setChattingRoom(chattingRoom);
+        }
+        else { // 채팅방 개설
+            postNum = jsonObj.get("postNum").toString();
+            sellerUser = jsonObj.get("sellerUser").toString();
+
+            ChattingRoom cr = new ChattingRoom();
+            cr.setPostNum(Long.parseLong(postNum));
+            cr.setSellerUser(sellerUser);
+            cr.setBuyerUser(buyerUser);
+//            cr.setCreateTime(time.split(" ")[1]);
+            cr.setCreateTime(time);
+
+            chattingRoom = chatService.setChattingRoom(cr);
+            chattingContent.setRoomId(chattingRoom.getRoomId());
+//            chattingContent.setChattingRoom(chattingRoom);
+        }
+
+        chattingContent.setUserPhone(buyerUser);
+        chattingContent.setContents(message);
+//        chattingContent.setSendTime(time.split(" ")[1]);
+        chattingContent.setSendTime(time);
+
+        chatService.setChattingContent(chattingContent);
+
+        System.out.println("roomId = " + roomId);
+        System.out.println("postNum = " + postNum);
+        System.out.println("buyerUser = " + buyerUser);
+        System.out.println("sellerUser = " + sellerUser);
+        System.out.println("message = " + message);
+        System.out.println("time = " + time);
+
 
     }
 

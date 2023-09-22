@@ -154,4 +154,8 @@ public class MemberController {
 
     }
 
+    public String getRefreshToken(String userPhone){
+        return memberService.getMemberInfo(userPhone).getRefreshToken();
+    }
+
 }

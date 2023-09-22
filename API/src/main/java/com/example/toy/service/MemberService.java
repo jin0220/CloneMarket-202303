@@ -16,6 +16,7 @@ public class MemberService implements UserDetailsService {
 
     public boolean login(String phone){
         Member member = memberRepository.findUserByPhone(phone);
+        System.out.println("member = " + member);
 
         if(member == null)
             return false;

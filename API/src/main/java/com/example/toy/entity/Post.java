@@ -1,20 +1,21 @@
 package com.example.toy.entity;
 
+import lombok.CustomLog;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "POST_NUM")
     private Long num;
-    private String phoneNum;
+    private String sellerUser;
     private String nickName;
     private String profile;
     private String title;
@@ -33,4 +34,11 @@ public class Post {
     private String img8;
     private String img9;
     private String img10;
+
+//    @ManyToOne
+//    @JoinColumn(name = "USER_PHONE")
+//    private Member member;
+//
+//    @OneToMany(mappedBy = "post")
+//    private List<ChattingRoom> chattingRooms = new ArrayList<>();
 }

@@ -9,15 +9,19 @@ import com.example.toy.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import javax.websocket.server.PathParam;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +36,9 @@ public class PostController {
     private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     HttpHeaders responseHeaders;
+
+    @Value("${file.upload.path}")
+    private String saveDir;
 
 
     @PostConstruct
@@ -71,18 +78,34 @@ public class PostController {
 
     @PostMapping("/post")
     @ResponseBody
-    public ResponseEntity<Message> post(@RequestBody HashMap<String, Object> param) {
-        log.info(param.get("title").toString());
+    public ResponseEntity<Message> post(
+            @RequestParam("phoneNum") String phoneNum,
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam("price") String price,
+            @RequestParam("date") String date,
+            @RequestParam("time") String time,
+            @RequestParam("file") MultipartFile file
+    ) {
+
+        log.info(title);
+        log.info(file.getOriginalFilename());
 
         Post post = new Post();
-        post.setPhoneNum(param.get("phoneNum").toString());
-        post.setTitle(param.get("title").toString());
-        post.setContent(param.get("content").toString());
-        post.setPrice(param.get("price").toString());
-        post.setDate(param.get("date").toString());
-        post.setTime(param.get("time").toString());
+        post.setSellerUser(phoneNum);
+        post.setTitle(title);
+        post.setContent(content);
+        post.setPrice(price);
+        post.setDate(date);
+        post.setTime(time);
 
-        Member member = memberService.getMemberInfo(param.get("phoneNum").toString());
+        if(!file.isEmpty()){
+            updateFile(file);
+            post.setImg1(file.getOriginalFilename());
+        }
+
+
+        Member member = memberService.getMemberInfo(phoneNum);
 
         post.setNickName(member.getNickName());
         post.setProfile(member.getProfile());
@@ -139,6 +162,20 @@ public class PostController {
         }
 
         return new ResponseEntity<>(message, responseHeaders, HttpStatus.OK);
+    }
+
+    public void updateFile(MultipartFile file) {
+        try {
+            String fileName = file.getOriginalFilename();
+
+            File profile = new File(saveDir, fileName);
+            file.transferTo(profile);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            log.info("fail");
+        }
+
     }
 
 }

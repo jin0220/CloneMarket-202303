@@ -40,15 +40,27 @@ public class ChatController {
 
     @PostMapping("/chattingRoom")
     public ResponseEntity<Message> getChattingRoom(@RequestBody HashMap<String, Object> param){
-        Long postNum = Long.parseLong(param.get("postNum").toString());
-        String userPhone = param.get("phoneNum").toString();
+        Long postNum = 0l, roomId = 0l;
+        String userPhone = null;
 
-        ChattingRoom roomChk = chatService.getChattingRoom(postNum, userPhone);
+        if(param.get("postNum") == null) {
+            roomId = Long.parseLong(param.get("roomId").toString());
+        }
+        else{
+            postNum = Long.parseLong(param.get("postNum").toString());
+            userPhone = param.get("phoneNum").toString();
+        }
+
+        if(postNum > 0) {
+            ChattingRoom roomChk = chatService.getChattingRoom(postNum, userPhone);
+            roomId = roomChk.getRoomId();
+        }
 
         List<ChattingContent> chat = new ArrayList<>();
 
         try { // 이미 방이 생성되어 있는 상태라면 이전 대화내용 불러오기
-                chat = chatService.getChattingContent(roomChk.getRoomId());
+                chat = chatService.getChattingContent(roomId);
+//                chat = roomChk.getChattingContents();
         }
         catch (NullPointerException e){
             log.info(e.getStackTrace().toString());
@@ -59,6 +71,24 @@ public class ChatController {
 
         Message message = new Message();
         message.setMessage("fail");
+        message.setStatus(StatusEnum.OK);
+        message.setData(map);
+
+
+        return new ResponseEntity<>(message, responseHeaders, HttpStatus.OK);
+    }
+
+    @PostMapping("/roomList")
+    public ResponseEntity<Message> getRoomList(@RequestBody HashMap<String, Object> param){
+        String userPhone = param.get("userPhone").toString();
+
+        List<ChattingRoom> roomList = chatService.getRoomList(userPhone);
+
+        Map<String, List<ChattingRoom>> map = new HashMap<>();
+        map.put("dataList", roomList);
+
+        Message message = new Message();
+        message.setMessage("success");
         message.setStatus(StatusEnum.OK);
         message.setData(map);
 

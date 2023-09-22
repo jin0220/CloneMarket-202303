@@ -1,6 +1,7 @@
 package com.example.toy.interceptor;
 
 import com.example.toy.configuration.JwtTokenProvider;
+import com.example.toy.controller.MemberController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -8,11 +9,14 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
 public class JwtTokenInterceptor implements HandlerInterceptor {
     private final JwtTokenProvider jwtTokenProvider;
+    private final MemberController memberController;
 
     /**
      * 컨트롤러 실행 전 수행한다. 반환 값이 true일 경우 컨트롤러로 진입하고 false일 경우 진입하지 않는다.
@@ -25,6 +29,9 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
         System.out.println("AccessToken:" + accessToken);
 //        String refreshToken = request.getHeader("REFRESH_TOKEN");
 //        System.out.println("RefreshToken:" + refreshToken);
+        String userPk = request.getHeader("USER");
+
+        String refreshToken;
 
         // accessToken 유효하면 true
         if(accessToken != null && jwtTokenProvider.validationToken(accessToken)){
@@ -33,6 +40,15 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
         }
         else if(accessToken != null){
             System.out.println("Invalid Access Token.");
+            refreshToken = memberController.getRefreshToken(userPk);
+
+            if(jwtTokenProvider.validationToken(refreshToken)){
+                System.out.println("Valid Refresh Token.");
+                HashMap<String, Object> m = new HashMap<>();
+                m.put("phoneNum",userPk);
+                memberController.login(m);
+                return true;
+            }
         }
 
         response.setStatus(401);
