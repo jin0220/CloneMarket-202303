@@ -32,8 +32,9 @@ public class PostDetailActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(PostViewModel.class);
 
         String postNum = getIntent().getStringExtra("postNum");
+        String sellerUser = null;
 
-        viewModel.getPostDetailResult(PreferenceManager.getString(this, "accessToken"), postNum);
+        viewModel.getPostDetailResult(PreferenceManager.getString(this, "accessToken"), PreferenceManager.getString(this, "phoneNum"), postNum);
 
         viewModel.response3.observe(this, new Observer<JsonElement>() {
             @Override
@@ -43,6 +44,7 @@ public class PostDetailActivity extends AppCompatActivity {
                     binding.nickName.setText(jsonElement.getAsJsonObject().get("nickName").toString());
                     binding.content.setText(jsonElement.getAsJsonObject().get("content").toString());
                     binding.location.setText(jsonElement.getAsJsonObject().get("location").toString());
+                    binding.sellerUser.setText(jsonElement.getAsJsonObject().get("sellerUser").toString());
                 }
             }
         });
@@ -52,6 +54,7 @@ public class PostDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
                 intent.putExtra("postNum", postNum);
+                intent.putExtra("sellerUser", binding.sellerUser.getText());
                 startActivity(intent);
             }
         });

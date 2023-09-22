@@ -2,7 +2,7 @@ package com.example.clonemarket.data.model;
 
 public class PostDto {
     private String num;
-
+    private String sellerUser;
     private String nickName;
     private String profile;
     private String title;
@@ -20,6 +20,14 @@ public class PostDto {
 
     public void setNum(String num) {
         this.num = num;
+    }
+
+    public String getSellerUser() {
+        return sellerUser;
+    }
+
+    public void setSellerUser(String sellerUser) {
+        this.sellerUser = sellerUser;
     }
 
     public String getTitle() {

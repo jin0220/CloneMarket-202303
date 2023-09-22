@@ -15,4 +15,10 @@ public class ChatViewModel extends ViewModel {
         repository.getChattingRoom(jsonObject);
         response = repository.dataList;
     }
+
+    public MutableLiveData<JsonArray> response2 = new MutableLiveData<>();
+    public void getRoomList(JsonObject jsonObject){
+        repository.getRoomList(jsonObject);
+        response2 = repository.dataList2;
+    }
 }

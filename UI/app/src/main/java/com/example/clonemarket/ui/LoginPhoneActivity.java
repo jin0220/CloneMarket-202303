@@ -181,6 +181,7 @@ public class LoginPhoneActivity extends AppCompatActivity {
 
                                 PreferenceManager.setString(getApplicationContext(), "accessToken", result);
                                 PreferenceManager.setString(getApplicationContext(), "phoneNum", phoneNum);
+                                PreferenceManager.setBoolean(getApplicationContext(), "login", true);
 
                                 if(pathChk.equals("login")){
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);

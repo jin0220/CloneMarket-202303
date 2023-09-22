@@ -1,10 +1,20 @@
 package com.example.clonemarket.data.model;
 
 public class ChatDto {
+
+    private Long roomId;
     private String phone;
     private String nickName;
     private String content;
     private String time;
+
+    public Long getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(Long roomId) {
+        this.roomId = roomId;
+    }
 
     public String getPhone() {
         return phone;

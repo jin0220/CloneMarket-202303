@@ -45,7 +45,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         binding.town.setText(data.getTown());
         binding.time.setText(data.getDate());
         binding.price.setText(data.getPrice());
-//        binding.img.setImageURI();
+//        binding.img.setImageURI(data.getImg());
     }
 
     @Override

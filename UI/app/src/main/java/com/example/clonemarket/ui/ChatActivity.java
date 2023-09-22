@@ -2,6 +2,7 @@ package com.example.clonemarket.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +23,9 @@ import org.json.JSONObject;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.nio.channels.SocketChannel;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
@@ -48,7 +52,7 @@ public class ChatActivity extends AppCompatActivity {
 
     ChatAdapter adapter;
 
-    private static final String HOST = "192.168.35.213"; // 노트북의 로컬 주소
+    private static final String HOST = "192.168.35.65"; // 노트북의 로컬 주소
     private static final int PORT = 9091;
 
     private EventLoopGroup group;
@@ -59,6 +63,8 @@ public class ChatActivity extends AppCompatActivity {
     ChatViewModel viewModel;
 
     String postNum;
+    String sellerUser;
+    long roomId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,12 +73,19 @@ public class ChatActivity extends AppCompatActivity {
         binding = ActivityChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        adapter = new ChatAdapter();
+        adapter = new ChatAdapter(getApplicationContext());
         binding.recyclerView.setAdapter(adapter);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         viewModel = new ChatViewModel();
 
-        postNum = getIntent().getStringExtra("postNum");
+        if(!getIntent().getStringExtra("postNum").equals("null")) {
+            postNum = getIntent().getStringExtra("postNum");
+            sellerUser = getIntent().getStringExtra("sellerUser");
+        }
+        else {
+            roomId = getIntent().getLongExtra("roomId",0);
+        }
 
         group = new NioEventLoopGroup();
 
@@ -117,26 +130,35 @@ public class ChatActivity extends AppCompatActivity {
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("postNum", postNum);
+        jsonObject.addProperty("roomId", roomId);
         jsonObject.addProperty("phoneNum", PreferenceManager.getString(getApplicationContext(),"phoneNum"));
         viewModel.getChattingRoom(jsonObject);
 
         viewModel.response.observe(ChatActivity.this, new Observer<JsonArray>() {
             @Override
             public void onChanged(JsonArray jsonElements) {
+                List<ChatDto> list = new ArrayList<>();
                 if(!jsonElements.isJsonNull()){
                     for(int i = 0; i < jsonElements.size(); i++) {
                         JsonObject jsonObject1 = (JsonObject) jsonElements.get(i);
 
+                        roomId = jsonObject1.get("roomId").getAsLong();
+
                         ChatDto data = new ChatDto();
-                        data.setNickName(jsonObject1.get("userPhone").getAsInt() + "");
+                        data.setRoomId(roomId);
+                        data.setPhone(jsonObject1.get("userPhone").getAsString());
+                        data.setNickName(jsonObject1.get("userPhone").getAsString());
                         data.setContent(jsonObject1.get("contents").getAsString());
                         data.setTime(jsonObject1.get("sendTime").getAsString());
-
+                        Log.d("confirm", "roomId recv :" + roomId);
                         Log.d("confirm","Chat " + data);
-//                        adapter.addData(data);
+
+                        list.add(data);
                     }
                 }
-//                adapter.notifyDataSetChanged();
+                adapter.dataList = list;
+                adapter.notifyDataSetChanged();
+                Log.d("confirm", "1");
             }
         });
 
@@ -145,7 +167,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(binding.content.getText().length() > 0) {
                     Log.d("confirm", "message send");
-                    sendMessageToServer();
+                    sendMessageToServer(roomId);
                     if (adapter.dataList.isEmpty()) {
 
                     } else {
@@ -158,15 +180,41 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void sendMessageToServer() {
+    private void sendMessageToServer(Long roomId) {
         if (channel != null && channel.isActive()) {
             String message = binding.content.getText().toString();
 
+            SimpleDateFormat sdfDate = new SimpleDateFormat("yyyyMMdd");
+            SimpleDateFormat sdfTime = new SimpleDateFormat("HHmmss");
+            String date = sdfDate.format(System.currentTimeMillis());
+            String time = sdfTime.format(System.currentTimeMillis());
+
             // JSON 형식으로 사용자 정보와 메시지를 함께 전송
             JSONObject jsonObject = new JSONObject();
+            Log.d("confirm", "roomId send :" + roomId);
             try {
-                jsonObject.put("phoneNum", PreferenceManager.getString(this, "phoneNum"));
+                if (roomId != 0) { // 기존에 존재하는 채팅방인 경우
+                    jsonObject.put("roomId", roomId);
+                }
+                else {
+                    jsonObject.put("sellerUser", sellerUser);
+                }
+                jsonObject.put("postNum", postNum);
+                jsonObject.put("buyerUser", PreferenceManager.getString(this, "phoneNum"));
                 jsonObject.put("message", message);
+//                jsonObject.put("time", date + " " + time);
+                jsonObject.put("time", System.currentTimeMillis());
+
+//                ChatDto data = new ChatDto();
+//                data.setRoomId(roomId);
+//                data.setPhone(postNum);
+//                data.setNickName(postNum);
+//                data.setContent(message);
+////                data.setTime();
+//
+//                adapter.dataList.add(data);
+//                adapter.notifyDataSetChanged();
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }

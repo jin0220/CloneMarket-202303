@@ -46,9 +46,12 @@ public interface ApiService {
     Call<JsonObject> getPostResult(@Query("page") int page);
 //    Call<JsonObject> getPostResult(@Query("accessToken") String accessToken, @Query("page") int page);
 
-    @Headers("Content-Type: application/json")
+    @Multipart
     @POST("/api/v1/post")
-    Call<JsonObject> setPost(@Body JsonObject jsonObject);
+    Call<JsonObject> setPost(
+            @PartMap Map<String, RequestBody> params,
+            @Part MultipartBody.Part file
+    );
 
     @Headers("Content-Type: application/json")
     @GET("/api/v1/postDetail")
@@ -57,5 +60,9 @@ public interface ApiService {
     @Headers("Content-Type: application/json")
     @POST("/api/v1/chattingRoom")
     Call<JsonObject> getChattingRoom(@Body JsonObject jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @POST("/api/v1/roomList")
+    Call<JsonObject> getRoomList(@Body JsonObject jsonObject);
 
 }

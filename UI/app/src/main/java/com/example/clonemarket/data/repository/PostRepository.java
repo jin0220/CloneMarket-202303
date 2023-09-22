@@ -12,7 +12,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.util.List;
+import java.util.Map;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,9 +26,9 @@ public class PostRepository {
 
     RetrofitClient retrofitClient;
 
-    public void getPostResult(String accessToken, int page) {
+    public void getPostResult(String accessToken, String userPhone, int page) {
         dataListArr = new MutableLiveData<>();
-        retrofitClient = new RetrofitClient(accessToken);
+        retrofitClient = new RetrofitClient(accessToken, userPhone);
         Log.d("confirm", "getPostResult() 토큰 ->" + accessToken);
 
         Call<JsonObject> call = retrofitClient.api().getPostResult(page);
@@ -74,10 +77,10 @@ public class PostRepository {
 
     //포스트 게시
     public MutableLiveData<Boolean> dataList1;
-    public void setPost(JsonObject jsonObject) {
+    public void setPost(Map<String, RequestBody> requestMap, MultipartBody.Part file) {
         dataList1 =  new MutableLiveData<>();
         retrofitClient = new RetrofitClient();
-        Call<JsonObject> call = retrofitClient.api().setPost(jsonObject);
+        Call<JsonObject> call = retrofitClient.api().setPost(requestMap, file);
 
         call.enqueue(new Callback<JsonObject>() {
             @Override
@@ -102,9 +105,9 @@ public class PostRepository {
     }
 
     public MutableLiveData<JsonElement> dataList2;
-    public void getPostDetailResult(String accessToken, String postNum) {
+    public void getPostDetailResult(String accessToken,String userPhone, String postNum) {
         dataList2 = new MutableLiveData<>();
-        retrofitClient = new RetrofitClient(accessToken);
+        retrofitClient = new RetrofitClient(accessToken, userPhone);
 
         Call<JsonObject> call = RetrofitClient.api().getPostDetailResult(postNum);
 

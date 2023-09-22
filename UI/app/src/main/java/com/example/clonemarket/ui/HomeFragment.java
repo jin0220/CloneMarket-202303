@@ -41,9 +41,13 @@ public class HomeFragment extends Fragment {
 
         viewModel = new PostViewModel();
         String accessToken = PreferenceManager.getString(getContext(), "accessToken");
-        Log.d("confirm", accessToken);
+        String userPhone = PreferenceManager.getString(getContext(), "phoneNum");
 
-        viewModel.getPost(accessToken, page);
+//        if(PreferenceManager.getBoolean(getContext(), "login")) {
+//
+//        }
+
+        viewModel.getPost(accessToken, userPhone, page);
 
         viewModel.response.observe(getViewLifecycleOwner(), new Observer<JsonArray>() {
             @Override
@@ -58,6 +62,9 @@ public class HomeFragment extends Fragment {
 //                        data.setTown(jsonObject1.get("location").getAsString());
                         data.setTime(jsonObject1.get("time").getAsString());
                         data.setPrice(jsonObject1.get("price").getAsString());
+                        if(!jsonObject1.get("img1").isJsonNull()) {
+                            data.setImg(jsonObject1.get("img1").getAsString());
+                        }
 
                         adapter.addData(data);
                     }
@@ -82,7 +89,7 @@ public class HomeFragment extends Fragment {
                 if(scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()){
                     page++;
 
-                    viewModel.getPost(accessToken, page);
+                    viewModel.getPost(accessToken, userPhone, page);
                 }
             }
         });

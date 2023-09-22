@@ -16,14 +16,16 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
-    private static final String BASE_URL = "https://e9e8-218-236-76-214.ngrok-free.app/";
+    private static final String BASE_URL = "https://2d33-218-236-76-214.ngrok-free.app/";
     private static String token = "";
+    private static String user = "";
 
     public RetrofitClient() {
     }
 
-    public RetrofitClient(String token) {
+    public RetrofitClient(String token, String user) {
         this.token = token;
+        this.user = user;
     }
 
     private static Retrofit getInstance() {
@@ -38,6 +40,7 @@ public class RetrofitClient {
                         .newBuilder()
                         .addHeader("X-AUTH-TOKEN",
                                 token)
+                        .addHeader("USER", user)
                         .build();
                 return chain.proceed(request);
             }

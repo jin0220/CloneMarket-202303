@@ -1,5 +1,8 @@
 package com.example.clonemarket.ui;
 
+import android.content.Context;
+import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,7 @@ import com.example.clonemarket.data.model.ChatDto;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -21,12 +25,19 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     String phoneNum;
 
+    private static final int LEFT = 1;
+    private static final int RIGHT = 2;
+
+    public ChatAdapter(Context context) {
+        phoneNum = PreferenceManager.getString(context,"phoneNum");
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        phoneNum = PreferenceManager.getString(parent.getContext(),"phoneNum");
-        if (viewType == 0) {
+
+        if (viewType == LEFT) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_left, parent, false);
             return new LeftHolder(view);
         }
@@ -40,16 +51,19 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ChatDto chat = dataList.get(position);
 
+
         String time;
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
 
-        if (Integer.parseInt(new SimpleDateFormat("HH").format(chat.getTime())) > 12) {
-            time = "오후 " + sdf.format(chat.getTime());
+        Long getTime = Long.parseLong(chat.getTime());
+
+        if (Integer.parseInt(new SimpleDateFormat("HH").format(getTime)) > 12) {
+            time = "오후 " + sdf.format(getTime);
         } else {
-            time = "오전 " + sdf.format(chat.getTime());
+            time = "오전 " + sdf.format(getTime);
         }
 
-        if(chat.getPhone().equals(phoneNum)){
+        if (holder instanceof LeftHolder){
             LeftHolder leftHolder = (LeftHolder) holder;
             leftHolder.name.setText(chat.getNickName());
             leftHolder.content.setText(chat.getContent());
@@ -64,7 +78,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        return dataList.get(position).getPhone().equals(phoneNum) ? 0 : 1 ;
+        return dataList.get(position).getPhone().equals(phoneNum) ? RIGHT : LEFT ;
     }
 
     @Override
