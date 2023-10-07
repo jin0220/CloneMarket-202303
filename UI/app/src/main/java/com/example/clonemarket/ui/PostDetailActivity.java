@@ -12,9 +12,11 @@ import android.view.View;
 
 import com.example.clonemarket.R;
 import com.example.clonemarket.data.PreferenceManager;
+import com.example.clonemarket.data.api.RetrofitClient;
 import com.example.clonemarket.databinding.ActivityPostDetailBinding;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.squareup.picasso.Picasso;
 
 public class PostDetailActivity extends AppCompatActivity {
 
@@ -40,11 +42,22 @@ public class PostDetailActivity extends AppCompatActivity {
             @Override
             public void onChanged(JsonElement jsonElement) {
                 if(!jsonElement.isJsonNull()){
-                    binding.title.setText(jsonElement.getAsJsonObject().get("title").toString());
-                    binding.nickName.setText(jsonElement.getAsJsonObject().get("nickName").toString());
-                    binding.content.setText(jsonElement.getAsJsonObject().get("content").toString());
-                    binding.location.setText(jsonElement.getAsJsonObject().get("location").toString());
-                    binding.sellerUser.setText(jsonElement.getAsJsonObject().get("sellerUser").toString());
+                    binding.title.setText(jsonElement.getAsJsonObject().get("title").getAsString());
+                    binding.nickName.setText(jsonElement.getAsJsonObject().get("nickName").getAsString());
+                    binding.content.setText(jsonElement.getAsJsonObject().get("content").getAsString());
+                    binding.location.setText(jsonElement.getAsJsonObject().get("location").getAsString());
+                    binding.sellerUser.setText(jsonElement.getAsJsonObject().get("sellerUser").getAsString());
+
+                    for(int i = 1; i <= 10; i++) {
+                        if (!jsonElement.getAsJsonObject().get("img" + i).isJsonNull()) {
+                            String imgUrl = RetrofitClient.BASE_URL + "profile/" + jsonElement.getAsJsonObject().get("img" + i).getAsString();
+                            Picasso.get().load(imgUrl).into(binding.img);
+                        }
+                    }
+
+                    binding.chatCnt.setText(jsonElement.getAsJsonObject().get("chatCnt").getAsString());
+                    binding.likeCnt.setText(jsonElement.getAsJsonObject().get("likeCnt").getAsString());
+                    binding.viewCnt.setText(jsonElement.getAsJsonObject().get("viewCnt").getAsString());
                 }
             }
         });

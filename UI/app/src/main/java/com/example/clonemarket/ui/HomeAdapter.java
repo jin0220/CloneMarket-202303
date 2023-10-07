@@ -1,5 +1,6 @@
 package com.example.clonemarket.ui;
 
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.clonemarket.data.model.PostDto;
 import com.example.clonemarket.databinding.RecyclerviewMainBinding;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +47,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         binding.town.setText(data.getTown());
         binding.time.setText(data.getDate());
         binding.price.setText(data.getPrice());
-//        binding.img.setImageURI(data.getImg());
+        Picasso.get().load(data.getImg()).into(binding.img);
     }
 
     @Override

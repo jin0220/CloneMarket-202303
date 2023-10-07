@@ -13,10 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.clonemarket.data.PreferenceManager;
+import com.example.clonemarket.data.api.RetrofitClient;
 import com.example.clonemarket.data.model.PostDto;
 import com.example.clonemarket.databinding.FragmentHomeBinding;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 
 public class HomeFragment extends Fragment {
@@ -59,13 +64,13 @@ public class HomeFragment extends Fragment {
                         PostDto data = new PostDto();
                         data.setNum(jsonObject1.get("num").getAsInt() + "");
                         data.setTitle(jsonObject1.get("title").getAsString());
-//                        data.setTown(jsonObject1.get("location").getAsString());
+                        data.setTown(jsonObject1.get("location").getAsString());
                         data.setTime(jsonObject1.get("time").getAsString());
                         data.setPrice(jsonObject1.get("price").getAsString());
                         if(!jsonObject1.get("img1").isJsonNull()) {
-                            data.setImg(jsonObject1.get("img1").getAsString());
+                            String imgUrl = RetrofitClient.BASE_URL + "profile/" + jsonObject1.get("img1").getAsString();
+                            data.setImg(imgUrl);
                         }
-
                         adapter.addData(data);
                     }
                 }
