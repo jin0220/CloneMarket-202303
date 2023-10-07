@@ -30,12 +30,12 @@ public class SecurityConfig {
      * 해당 경로에 대한 요청은 인증/인가 처리하지 않는다.
      * @return
      */
-//    @Bean
-//    public WebSecurityCustomizer configure() {
-//        return (web) -> web.ignoring().mvcMatchers(
-//                "/style.css"
-//        );
-//    }
+    @Bean
+    public WebSecurityCustomizer configure() {
+        return (web) -> web.ignoring().mvcMatchers(
+                "/static/**"
+        );
+    }
 
     /**
      * 인증/인가에 대한 설정

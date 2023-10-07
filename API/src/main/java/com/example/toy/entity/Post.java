@@ -3,6 +3,7 @@ package com.example.toy.entity;
 import lombok.CustomLog;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -34,6 +35,13 @@ public class Post {
     private String img8;
     private String img9;
     private String img10;
+
+    @ColumnDefault("0")
+    private Long chatCnt;
+    @ColumnDefault("0")
+    private Long likeCnt;
+    @ColumnDefault("0")
+    private Long viewCnt;
 
 //    @ManyToOne
 //    @JoinColumn(name = "USER_PHONE")
