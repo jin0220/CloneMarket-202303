@@ -65,4 +65,16 @@ public interface ApiService {
     @POST("/api/v1/roomList")
     Call<JsonObject> getRoomList(@Body JsonObject jsonObject);
 
+    @Headers("Content-Type: application/json")
+    @GET("/api/v1/infoList")
+    Call<JsonObject> getInfoList(@Query("page") int page);
+
+    @Headers("Content-Type: application/json")
+    @GET("/api/v1/info")
+    Call<JsonObject> getInfo(@Query("num") Long num);
+
+    @Headers("Content-Type: application/json")
+    @POST("/api/v1/info")
+    Call<JsonObject> setInfo(@Body JsonObject jsonObject);
+
 }

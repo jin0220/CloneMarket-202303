@@ -15,7 +15,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CloneMarket">
-        <activity android:name=".ui.ChatActivity"></activity>
+        <activity android:name=".ui.WriteInfoActivity"></activity>
+        <activity android:name=".ui.InfoDetailActivity" />
+        <activity android:name=".ui.ChatActivity" />
         <activity android:name=".ui.PostDetailActivity" />
         <activity android:name=".ui.WritePostActivity" />
         <activity android:name=".ui.ProfileActivity" />

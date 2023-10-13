@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
-    Fragment home, chattingRoom;
+    Fragment home, town, chattingRoom;
 
 
     @Override
@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         home = new HomeFragment();
+        town = new TownInfoFragment();
         chattingRoom = new ChattingRoomFragment();
 
         getSupportFragmentManager().beginTransaction().add(binding.mainFragment.getId(), home).commit();
@@ -38,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()){
                     case R.id.home:
                         getSupportFragmentManager().beginTransaction().replace(binding.mainFragment.getId(), home).commit();
+                        return true;
+                    case R.id.town:
+                        getSupportFragmentManager().beginTransaction().replace(binding.mainFragment.getId(), town).commit();
                         return true;
                     case R.id.chatting:
                         getSupportFragmentManager().beginTransaction().replace(binding.mainFragment.getId(), chattingRoom).commit();
