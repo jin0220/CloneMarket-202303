@@ -51,11 +51,11 @@ public class TownInfoRepository {
         });
     }
 
-    public void getInfo(Long num){
+    public void getInfo(String phoneNum, Long num){
         data = new MutableLiveData<>();
         retrofitClient = new RetrofitClient();
 
-        Call<JsonObject> call = RetrofitClient.api().getInfo(num);
+        Call<JsonObject> call = RetrofitClient.api().getInfo(phoneNum, num);
 
         call.enqueue(new Callback<JsonObject>() {
             @Override
@@ -105,6 +105,64 @@ public class TownInfoRepository {
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 t.printStackTrace();
                 Log.d("confirm", "setInfo() 통신 실패");
+            }
+        });
+    }
+
+    public void deleteInfo(Long num) {
+        result = new MutableLiveData<>();
+        retrofitClient = new RetrofitClient();
+
+        Call<JsonObject> call = RetrofitClient.api().deleteInfo(num);
+
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()) {
+                    JsonParser jsonParser = new JsonParser();
+                    JsonObject obj = (JsonObject) jsonParser.parse(response.body().get("data").toString());
+                    JsonElement jsonElement = (JsonElement) obj.get("result");
+                    Log.d("confirm", "deleteInfo() 응답 성공 ->" + jsonElement);
+                    result.setValue(jsonElement.getAsString());
+                }
+                else {
+                    Log.d("confirm", "deleteInfo() 응답 실패");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                t.printStackTrace();
+                Log.d("confirm", "deleteInfo() 통신 실패");
+            }
+        });
+    }
+
+    public void modInfo(Long num, JsonObject jsonObject){
+        result = new MutableLiveData<>();
+        retrofitClient = new RetrofitClient();
+
+        Call<JsonObject> call = RetrofitClient.api().modInfo(num, jsonObject);
+
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()) {
+                    JsonParser jsonParser = new JsonParser();
+                    JsonObject obj = (JsonObject) jsonParser.parse(response.body().get("data").toString());
+                    JsonElement jsonElement = (JsonElement) obj.get("result");
+                    Log.d("confirm", "modInfo() 응답 성공 ->" + jsonElement);
+                    result.setValue(jsonElement.getAsString());
+                }
+                else {
+                    Log.d("confirm", "modInfo() 응답 실패");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                t.printStackTrace();
+                Log.d("confirm", "modInfo() 통신 실패");
             }
         });
     }

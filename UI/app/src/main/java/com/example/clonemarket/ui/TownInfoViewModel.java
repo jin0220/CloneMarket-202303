@@ -22,10 +22,10 @@ public class TownInfoViewModel extends ViewModel {
         responseArr = repository.dataList;
     }
 
-    public void getInfo(Long num){
+    public void getInfo(String phoneNum, Long num){
         response = new MutableLiveData<>();
 
-        repository.getInfo(num);
+        repository.getInfo(phoneNum, num);
         response = repository.data;
     }
 
@@ -33,6 +33,20 @@ public class TownInfoViewModel extends ViewModel {
         response = new MutableLiveData<>();
 
         repository.setInfo(jsonObject);
+        responseStr = repository.result;
+    }
+
+    public void deleteInfo(Long num) {
+        responseStr = new MutableLiveData<>();
+
+        repository.deleteInfo(num);
+        responseStr = repository.result;
+    }
+
+    public void modInfo(Long num, JsonObject jsonObject){
+        responseStr = new MutableLiveData<>();
+
+        repository.modInfo(num, jsonObject);
         responseStr = repository.result;
     }
 }

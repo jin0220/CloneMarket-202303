@@ -24,6 +24,10 @@ public class WriteInfoActivity extends AppCompatActivity {
 
     TownInfoViewModel viewModel;
 
+    boolean mod_chk;
+    Long num;
+    String title, content;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +39,16 @@ public class WriteInfoActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(TownInfoViewModel.class);
 
+        mod_chk = getIntent().getBooleanExtra("mod_chk", false);
 
+        if(mod_chk){
+            num = getIntent().getLongExtra("num", 0);
+            title = getIntent().getStringExtra("title");
+            content = getIntent().getStringExtra("content");
+
+            binding.title.setText(title);
+            binding.content.setText(content);
+        }
     }
 
     @Override
@@ -51,7 +64,8 @@ public class WriteInfoActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.store:
-                infoSave();
+                if(mod_chk) modInfo();
+                else infoSave();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -75,6 +89,31 @@ public class WriteInfoActivity extends AppCompatActivity {
 
                 if(chk){
                     Toast.makeText(WriteInfoActivity.this, "글이 저장되었습니다.", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(WriteInfoActivity.this, "서버 요청 오류로 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    public void modInfo(){
+        String title = binding.title.getText().toString();
+        String content = binding.content.getText().toString();
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("title", title);
+        jsonObject.addProperty("content", content);
+
+        viewModel.modInfo(num, jsonObject);
+
+        viewModel.responseStr.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                boolean chk = Boolean.parseBoolean(s);
+
+                if(chk){
+                    Toast.makeText(WriteInfoActivity.this, "글이 수정되었습니다.", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
                     Toast.makeText(WriteInfoActivity.this, "서버 요청 오류로 다시 시도해주세요.", Toast.LENGTH_SHORT).show();

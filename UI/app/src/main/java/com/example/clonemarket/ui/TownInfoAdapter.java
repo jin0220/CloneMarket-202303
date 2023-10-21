@@ -21,7 +21,7 @@ public class TownInfoAdapter extends RecyclerView.Adapter<TownInfoAdapter.ViewHo
     List<TownInfoDto> dataList = new ArrayList<>();
 
     public interface OnItemClickListener{
-        void onItemClick(View v, int position, Long num);
+        void onItemClick(View v, int position, Long num, String writer);
     }
 
     private OnItemClickListener mListener = null ;
@@ -63,9 +63,10 @@ public class TownInfoAdapter extends RecyclerView.Adapter<TownInfoAdapter.ViewHo
                     int position = getAdapterPosition();
                     TownInfoDto data = dataList.get(position);
                     Long num = data.getNum();
+                    String writer = data.getWriteUser();
                     if(position != RecyclerView.NO_POSITION){
                         if(mListener != null) {
-                            mListener.onItemClick(view, position, num);
+                            mListener.onItemClick(view, position, num, writer);
                         }
                     }
                 }

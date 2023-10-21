@@ -11,11 +11,13 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
@@ -71,10 +73,18 @@ public interface ApiService {
 
     @Headers("Content-Type: application/json")
     @GET("/api/v1/info")
-    Call<JsonObject> getInfo(@Query("num") Long num);
+    Call<JsonObject> getInfo(@Query("userPhone") String userPhone, @Query("num") Long num);
 
     @Headers("Content-Type: application/json")
     @POST("/api/v1/info")
     Call<JsonObject> setInfo(@Body JsonObject jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @DELETE("/api/v1/info/{num}")
+    Call<JsonObject> deleteInfo(@Path("num") Long num);
+
+    @Headers("Content-Type: application/json")
+    @PUT("/api/v1/info/{num}")
+    Call<JsonObject> modInfo(@Path("num") Long num, @Body JsonObject jsonObject);
 
 }

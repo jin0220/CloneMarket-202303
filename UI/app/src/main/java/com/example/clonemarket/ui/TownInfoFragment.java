@@ -77,9 +77,10 @@ public class TownInfoFragment extends Fragment {
 
         adapter.setOnItemClickListener(new TownInfoAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View v, int position, Long num) {
+            public void onItemClick(View v, int position, Long num, String writer) {
                 Intent intent = new Intent(getContext(), InfoDetailActivity.class);
                 intent.putExtra("infoNum", num);
+                intent.putExtra("writer", writer);
                 startActivity(intent);
             }
         });
