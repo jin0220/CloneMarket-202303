@@ -4,10 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter @Setter
@@ -23,8 +20,10 @@ public class Info {
     private String date;
     private String time;
 
+    @Column(name = "view_cnt")
     @ColumnDefault("0")
     private Long viewCnt;
+    @Column(name = "comment_cnt")
     @ColumnDefault("0")
     private Long commentCnt;
 }
