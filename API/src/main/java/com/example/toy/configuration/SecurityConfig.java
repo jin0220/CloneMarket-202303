@@ -47,7 +47,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeRequests()
                 .antMatchers("/login",
-                        "/api/v1/signup"
+                        "/api/v1/signup",
+                        "/api/v1/profile"
                 ).permitAll()
                 .and()
                 .httpBasic().disable()

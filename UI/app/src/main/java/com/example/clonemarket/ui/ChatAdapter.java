@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,11 +15,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.clonemarket.R;
 import com.example.clonemarket.data.PreferenceManager;
 import com.example.clonemarket.data.model.ChatDto;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     List<ChatDto> dataList = new ArrayList<>();
@@ -68,6 +72,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             leftHolder.name.setText(chat.getNickName());
             leftHolder.content.setText(chat.getContent());
             leftHolder.time.setText(time);
+            Picasso.get().load(chat.getImg()).into(leftHolder.profile);
         }
         else {
             RightHolder rightHolder = (RightHolder) holder;
@@ -89,12 +94,14 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public class LeftHolder extends RecyclerView.ViewHolder {
         TextView name, content, time;
+        CircleImageView profile;
 
         public LeftHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.name);
             content = itemView.findViewById(R.id.content);
             time = itemView.findViewById(R.id.time);
+            profile = itemView.findViewById(R.id.profile);
         }
     }
 

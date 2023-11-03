@@ -97,10 +97,12 @@ public class ChattingRoomFragment extends Fragment {
 
         adapter.setOnItemClickListener(new ChattingRoomAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View v, int position, Long roomId) {
+            public void onItemClick(View v, int position, Long roomId, String nickName, String img) {
                 Intent intent = new Intent(getContext(), ChatActivity.class);
                 intent.putExtra("postNum", "null");
                 intent.putExtra("roomId", roomId);
+                intent.putExtra("nickName", nickName);
+                intent.putExtra("profile", img);
                 startActivity(intent);
             }
         });

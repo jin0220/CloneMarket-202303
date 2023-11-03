@@ -117,6 +117,7 @@ public class LocationActivity extends AppCompatActivity {
             public void onItemClick(View v, int position, String userLocation) {
                 Intent intent = new Intent(getApplicationContext(), LoginPhoneActivity.class);
                 intent.putExtra("userLocation", userLocation);
+                intent.putExtra("pathChk", "signup");
                 startActivity(intent);
             }
         });

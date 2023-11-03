@@ -35,6 +35,7 @@ public class LoginPhoneActivity extends AppCompatActivity {
     String responseAuthNum;
 
     String phoneNum;
+    String location = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,10 @@ public class LoginPhoneActivity extends AppCompatActivity {
         confirm = findViewById(R.id.button3);
 
         String pathChk = getIntent().getStringExtra("pathChk");
+
+        if(pathChk.equals("signup")){
+            location = getIntent().getStringExtra("userLocation");
+        }
 
 
         editTextPhone.addTextChangedListener(new TextWatcher() {
@@ -171,35 +176,42 @@ public class LoginPhoneActivity extends AppCompatActivity {
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("phoneNum", phoneNum);
 
-                    viewModel.getLoginResult(jsonObject);
+                    if (pathChk.equals("login")) {
+                        viewModel.getLoginResult(jsonObject);
 
-                    viewModel.response2.observe(LoginPhoneActivity.this, new Observer<String>() {
-                        @Override
-                        public void onChanged(String result) {
-                            if (!result.isEmpty()) {
-                                Log.d("confirm", "success");
+                        viewModel.response2.observe(LoginPhoneActivity.this, new Observer<String>() {
+                            @Override
+                            public void onChanged(String result) {
+                                if (!result.isEmpty()) {
+                                    Log.d("confirm", "success");
 
-                                PreferenceManager.setString(getApplicationContext(), "accessToken", result);
-                                PreferenceManager.setString(getApplicationContext(), "phoneNum", phoneNum);
-                                PreferenceManager.setBoolean(getApplicationContext(), "login", true);
+                                    PreferenceManager.setString(getApplicationContext(), "accessToken", result);
+                                    PreferenceManager.setString(getApplicationContext(), "phoneNum", phoneNum);
+                                    PreferenceManager.setBoolean(getApplicationContext(), "login", true);
 
-                                if(pathChk.equals("login")){
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    startActivity(intent);
+//                                    if (pathChk.equals("login")) {
+                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        startActivity(intent);
+//                                    } else {
+//                                        Intent intent = new Intent(LoginPhoneActivity.this, ProfileActivity.class);
+//                                        intent.putExtra("userLocation", location);
+//                                        intent.putExtra("phoneNum", phoneNum);
+//                                        startActivity(intent);
+//                                    }
+
+                                } else {
+                                    Log.d("confirm", "fail");
+                                    Toast.makeText(getApplicationContext(), "서버 요청 오류로 잠시 후 다시 시도해주세요.", Toast.LENGTH_LONG).show();
                                 }
-                                else {
-                                    Intent intent = new Intent(LoginPhoneActivity.this, ProfileActivity.class);
-//                                intent.putExtra("phoneNum", editTextPhone.getText());
-                                    intent.putExtra("phoneNum", phoneNum);
-                                    startActivity(intent);
-                                }
-
-                            } else {
-                                Log.d("confirm", "fail");
-                                Toast.makeText(getApplicationContext(), "서버 요청 오류로 잠시 후 다시 시도해주세요.", Toast.LENGTH_LONG).show();
                             }
-                        }
-                    });
+                        });
+                    }
+                    else {
+                        Intent intent = new Intent(LoginPhoneActivity.this, ProfileActivity.class);
+                        intent.putExtra("userLocation", location);
+                        intent.putExtra("phoneNum", phoneNum);
+                        startActivity(intent);
+                    }
                 }
             }
         });

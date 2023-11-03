@@ -54,10 +54,12 @@ public class UserRepository {
     }
 
     // 로그인
-    public MutableLiveData<String> dataList2 =  new MutableLiveData<>();
+    public MutableLiveData<String> dataList2;
     public void getLoginResult(JsonObject jsonObject){
         retrofitClient = new RetrofitClient();
         Call<JsonObject> call = retrofitClient.api().getLoginResult(jsonObject);
+
+        dataList2 =  new MutableLiveData<>();
 
         call.enqueue(new Callback<JsonObject>() {
             @Override
@@ -81,17 +83,18 @@ public class UserRepository {
     }
 
     // 프로필 설정
-    public MutableLiveData<Boolean> dataList3 =  new MutableLiveData<>();
     public void setProfile(Map<String, RequestBody> requestMap, MultipartBody.Part file) {
         retrofitClient = new RetrofitClient();
         Call<JsonObject> call = retrofitClient.api().setProfile(requestMap, file);
+
+        dataList2 =  new MutableLiveData<>();
 
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if(response.isSuccessful()){
                     Log.d("confirm", "setProfile() 응답 성공 -> " + response.body().get("data").toString());
-                    dataList3.setValue(response.body().get("data").getAsJsonObject().get("result").getAsBoolean());
+                    dataList2.setValue(response.body().get("data").getAsJsonObject().get("result").getAsString());
                 }
                 else{
                     Log.d("confirm", "setProfile() 응답 실패");

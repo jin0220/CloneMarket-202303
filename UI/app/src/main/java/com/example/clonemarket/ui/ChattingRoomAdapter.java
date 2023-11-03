@@ -21,7 +21,7 @@ public class ChattingRoomAdapter extends RecyclerView.Adapter<ChattingRoomAdapte
     List<ChatDto> dataList = new ArrayList<>();
 
     public interface OnItemClickListener{
-        void onItemClick(View v, int position, Long roomId);
+        void onItemClick(View v, int position, Long roomId, String nickName, String img);
     }
 
     private ChattingRoomAdapter.OnItemClickListener mListener = null ;
@@ -67,7 +67,7 @@ public class ChattingRoomAdapter extends RecyclerView.Adapter<ChattingRoomAdapte
                     Long roomId = data.getRoomId();
                     if(position != RecyclerView.NO_POSITION){
                         if(mListener != null) {
-                            mListener.onItemClick(view, position, roomId);
+                            mListener.onItemClick(view, position, roomId, data.getNickName(), data.getImg());
                         }
                     }
                 }

@@ -45,7 +45,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         binding.postNum.setText(data.getNum());
         binding.title.setText(data.getTitle());
         binding.town.setText(data.getTown());
-        binding.time.setText(data.getDate());
+        binding.time.setText(data.getTime());
         binding.price.setText(data.getPrice());
         Picasso.get().load(data.getImg()).into(binding.img);
     }

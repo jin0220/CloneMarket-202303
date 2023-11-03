@@ -109,7 +109,7 @@ public class MemberController {
         log.info(nickName);
         log.info(file.getOriginalFilename());
 
-        boolean check = false;
+        boolean check;
 
         if(!file.isEmpty()){
             updateProfile(file);
@@ -122,11 +122,18 @@ public class MemberController {
         }
 
         Message message = new Message();
-        Map<String, Boolean> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
 
         if(check) {
+            // 1. accessToken과 refreshToken를 생성한다.
+            String accessToken = jwtTokenProvider.createToken(phoneNum);
+            String refreshToken = jwtTokenProvider.createRefreshToken(phoneNum);
+
+            // 2. refreshToken은 DB에 저장한다. 유효하지 않은 accessToken으로 요청이 왔을 때 처리하기 위한 토근.
+            authService.updateRefreshToken(refreshToken, phoneNum);
+
             log.info("success");
-            map.put("result", true);
+            map.put("result", accessToken);
 
             message.setMessage("success");
             message.setStatus(StatusEnum.OK);
@@ -134,7 +141,7 @@ public class MemberController {
         }
         else {
             log.info("fail");
-            map.put("result", false);
+            map.put("result", null);
 
             message.setMessage("fail");
             message.setStatus(StatusEnum.OK);

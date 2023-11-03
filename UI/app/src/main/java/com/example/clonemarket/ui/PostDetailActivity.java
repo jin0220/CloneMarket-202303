@@ -23,6 +23,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private ActivityPostDetailBinding binding;
 
     PostViewModel viewModel;
+    String nickName, profile=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +43,15 @@ public class PostDetailActivity extends AppCompatActivity {
             @Override
             public void onChanged(JsonElement jsonElement) {
                 if(!jsonElement.isJsonNull()){
+                    nickName = jsonElement.getAsJsonObject().get("nickName").getAsString();
+
+                    if(!jsonElement.getAsJsonObject().get("profile").getAsString().equals("") && !jsonElement.getAsJsonObject().get("profile").getAsString().isEmpty()) {
+                        profile = RetrofitClient.BASE_URL + "profile/" + jsonElement.getAsJsonObject().get("profile").getAsString();
+                        Picasso.get().load(profile).into(binding.imageView);
+                    }
+
                     binding.title.setText(jsonElement.getAsJsonObject().get("title").getAsString());
-                    binding.nickName.setText(jsonElement.getAsJsonObject().get("nickName").getAsString());
+                    binding.nickName.setText(nickName);
                     binding.content.setText(jsonElement.getAsJsonObject().get("content").getAsString());
                     binding.location.setText(jsonElement.getAsJsonObject().get("location").getAsString());
                     binding.sellerUser.setText(jsonElement.getAsJsonObject().get("sellerUser").getAsString());
@@ -68,6 +76,8 @@ public class PostDetailActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
                 intent.putExtra("postNum", postNum);
                 intent.putExtra("sellerUser", binding.sellerUser.getText());
+                intent.putExtra("nickName", nickName);
+                intent.putExtra("profile",profile);
                 startActivity(intent);
             }
         });

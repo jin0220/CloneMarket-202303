@@ -31,11 +31,13 @@ public class MemberService implements UserDetailsService {
         member.setProfile(imgFile);
 
         Member member1 = memberRepository.findUserByPhone(phoneNum);
-        if(member1.getPhone().isEmpty()){
-            memberRepository.save(member);
+        if(member1 != null){
+            System.out.println("member1 = " + member1);
+
         }
         else {
-
+            memberRepository.save(member);
+            System.out.println("save = ");
         }
 
         return true;

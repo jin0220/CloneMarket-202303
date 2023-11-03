@@ -52,7 +52,7 @@ public class ChatActivity extends AppCompatActivity {
 
     ChatAdapter adapter;
 
-    private static final String HOST = "192.168.35.65"; // 노트북의 로컬 주소
+    private static final String HOST = "192.168.35.104"; // 노트북의 로컬 주소
     private static final int PORT = 9091;
 
     private EventLoopGroup group;
@@ -63,7 +63,7 @@ public class ChatActivity extends AppCompatActivity {
     ChatViewModel viewModel;
 
     String postNum;
-    String sellerUser;
+    String sellerUser, nickName, profile;
     long roomId = 0;
 
     @Override
@@ -86,6 +86,10 @@ public class ChatActivity extends AppCompatActivity {
         else {
             roomId = getIntent().getLongExtra("roomId",0);
         }
+        nickName = getIntent().getStringExtra("nickName");
+        profile = getIntent().getStringExtra("profile");
+
+        Log.d("confirm", "nickName : " + nickName + " < profile" + profile);
 
         group = new NioEventLoopGroup();
 
@@ -147,11 +151,12 @@ public class ChatActivity extends AppCompatActivity {
                         ChatDto data = new ChatDto();
                         data.setRoomId(roomId);
                         data.setPhone(jsonObject1.get("userPhone").getAsString());
-                        data.setNickName(jsonObject1.get("userPhone").getAsString());
+                        data.setNickName(nickName);
+                        data.setImg(profile);
                         data.setContent(jsonObject1.get("contents").getAsString());
                         data.setTime(jsonObject1.get("sendTime").getAsString());
                         Log.d("confirm", "roomId recv :" + roomId);
-                        Log.d("confirm","Chat " + data);
+                        Log.d("confirm","Chat " + data.getClass());
 
                         list.add(data);
                     }

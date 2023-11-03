@@ -5,10 +5,12 @@
     android:orientation="horizontal"
     android:padding="10dp">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:src="@drawable/ic_baseline_person_outline_24" />
+        android:src="@drawable/ic_baseline_person_outline_24"
+        android:tint="@color/white"/>
 
     <LinearLayout
         android:layout_width="wrap_content"

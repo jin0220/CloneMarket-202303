@@ -26,9 +26,8 @@ public class UserViewModel extends ViewModel {
         response2 = repository.dataList2;
     }
 
-    public MutableLiveData<Boolean> response3 = new MutableLiveData<>();
     public void setProfile(Map<String, RequestBody> requestMap, MultipartBody.Part file){
         repository.setProfile(requestMap, file);
-        response3 = repository.dataList3;
+        response2 = repository.dataList2;
     }
 }

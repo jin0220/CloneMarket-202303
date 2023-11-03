@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.clonemarket.R;
+import com.example.clonemarket.data.PreferenceManager;
 import com.example.clonemarket.databinding.ActivityProfileBinding;
 
 import java.io.File;
@@ -60,6 +61,7 @@ public class ProfileActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         String phoneNum = getIntent().getStringExtra("phoneNum");
+        String location = getIntent().getStringExtra("userLocation");
 
         binding.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,10 +92,14 @@ public class ProfileActivity extends AppCompatActivity {
 
 //                        viewModel.setProfile(phoneNum, binding.editText.getText().toString(), filePart);
 
-                        viewModel.response3.observe(ProfileActivity.this, new Observer<Boolean>() {
+                        viewModel.response2.observe(ProfileActivity.this, new Observer<String>() {
                             @Override
-                            public void onChanged(Boolean result) {
-                                if (result) {
+                            public void onChanged(String result) {
+                                if (!result.isEmpty()) {
+                                    PreferenceManager.setString(getApplicationContext(), "accessToken", result);
+                                    PreferenceManager.setString(getApplicationContext(), "phoneNum", phoneNum);
+                                    PreferenceManager.setBoolean(getApplicationContext(), "login", true);
+
                                     Log.d("confirm", "success");
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                     startActivity(intent);
