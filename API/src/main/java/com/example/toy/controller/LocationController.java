@@ -4,6 +4,7 @@ import com.example.toy.dto.LocationDto;
 import com.example.toy.entity.response.Message;
 import com.example.toy.entity.response.StatusEnum;
 import com.example.toy.service.LocationService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ public class LocationController {
         responseHeaders.add("Content-Type", "application/json; charset=UTF-8");
     }
 
+    @ApiOperation(value = "동네 리스트 조회", notes = "사용자의 위치 기준으로 가까운 동네 순서로 조회한다.")
     @PostMapping("/location")
     @ResponseBody
     public ResponseEntity<Message> getLocation(@RequestBody HashMap<String, Object> param) {

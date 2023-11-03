@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.clonemarket.data.model.ChatDto;
 import com.example.clonemarket.databinding.RecyclerviewChatBinding;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +42,11 @@ public class ChattingRoomAdapter extends RecyclerView.Adapter<ChattingRoomAdapte
         ChatDto data = dataList.get(position);
         binding.nickName.setText(data.getNickName());
 //        binding.town.setText(data.get);
-//        binding.time.setText(data.getTime());
+        binding.time.setText(data.getTime());
         binding.content.setText(data.getContent());
+
+        if(data.getImg() != null)
+            Picasso.get().load(data.getImg()).into(binding.imageView);
     }
 
     @Override

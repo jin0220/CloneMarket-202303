@@ -25,6 +25,9 @@ spring:
       maxRequestSize: 10MB
   jwt:
     secret: HRlELXqpSB
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 server:
   host: localhost
   port: 9090

@@ -1,10 +1,12 @@
 package com.example.toy.controller;
 
+import com.example.toy.dto.ChattingRoomDto;
 import com.example.toy.entity.ChattingContent;
 import com.example.toy.entity.ChattingRoom;
 import com.example.toy.entity.response.Message;
 import com.example.toy.entity.response.StatusEnum;
 import com.example.toy.service.ChatService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +40,7 @@ public class ChatController {
         responseHeaders.add("Content-Type", "application/json; charset=UTF-8");
     }
 
+    @ApiOperation(value = "채팅방 입장", notes = "채팅방에 입장하면 이전에 대화내용이 있을 경우 대화 불러오기")
     @PostMapping("/chattingRoom")
     public ResponseEntity<Message> getChattingRoom(@RequestBody HashMap<String, Object> param){
         Long postNum = 0l, roomId = 0l;
@@ -78,13 +81,14 @@ public class ChatController {
         return new ResponseEntity<>(message, responseHeaders, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "사용자 채팅방 리스트 조회", notes = "사용자의 채팅방 리스트를 조회한다.")
     @PostMapping("/roomList")
     public ResponseEntity<Message> getRoomList(@RequestBody HashMap<String, Object> param){
         String userPhone = param.get("userPhone").toString();
 
-        List<ChattingRoom> roomList = chatService.getRoomList(userPhone);
+        List<ChattingRoomDto> roomList = chatService.getRoomList(userPhone);
 
-        Map<String, List<ChattingRoom>> map = new HashMap<>();
+        Map<String, List<ChattingRoomDto>> map = new HashMap<>();
         map.put("dataList", roomList);
 
         Message message = new Message();

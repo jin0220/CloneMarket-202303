@@ -5,6 +5,9 @@ import com.example.toy.entity.Info;
 import com.example.toy.entity.response.Message;
 import com.example.toy.entity.response.StatusEnum;
 import com.example.toy.service.InfoService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.websocket.server.PathParam;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +46,7 @@ public class InfoController {
         responseHeaders.add("Content-Type", "application/json; charset=UTF-8");
     }
 
+    @ApiOperation(value = "동네생활 조회", notes = "동네생활 전체 리스트를 조회한다.")
     @GetMapping("/infoList")
     @ResponseBody
     public ResponseEntity<Message> getInfoList(@Param("page") int page) {
@@ -58,6 +64,7 @@ public class InfoController {
         return new ResponseEntity<>(message, responseHeaders, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "동네생활의 상세정보 조회", notes = "동네생활 게시글의 상세 정보를 조회한다.")
     @GetMapping("/info")
     @ResponseBody
     public ResponseEntity<Message> getInfo(@Param("userPhone") String userPhone, @Param("num") Long num){
@@ -85,6 +92,31 @@ public class InfoController {
         return new ResponseEntity<>(message, responseHeaders, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "게시글 생성", notes = "사용자의 입력 정보를 생성한다.")
+    @ApiImplicitParams({
+        @ApiImplicitParam(
+                name = "title"
+                , value = "게시글 제목"
+                , required = true
+                , dataType = "string"
+                , paramType = "body"
+        )
+        ,
+        @ApiImplicitParam(
+                name = "content"
+                , value = "게시글 내용"
+                , required = true
+                , dataType = "string"
+                , paramType = "body"
+        ),
+            @ApiImplicitParam(
+                    name = "writer"
+                    , value = "작성자 아이디"
+                    , required = true
+                    , dataType = "string"
+                    , paramType = "body"
+            )
+    })
     @PostMapping("/info")
     @ResponseBody
     public ResponseEntity<Message> setInfo(@RequestBody HashMap<String, Object> param){
@@ -93,6 +125,13 @@ public class InfoController {
         info.setContent(param.get("content").toString());
         info.setWriter(param.get("writer").toString());
 //        info.setTown(param.get("town").toString());
+
+        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat time = new SimpleDateFormat("HH:mm");
+        Date today = new Date(System.currentTimeMillis());
+
+        info.setDate(date.format(today));
+        info.setTime(time.format(today));
 
         boolean chk = infoService.setInfo(info);
 
@@ -117,6 +156,7 @@ public class InfoController {
         return new ResponseEntity<>(message, responseHeaders, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "게시글 삭제", notes = "사용자의 게시글을 삭제한다.")
     @DeleteMapping("/info/{num}")
     public ResponseEntity<Message> deleteInfo(@PathVariable Long num) {
         boolean chk = infoService.deleteInfo(num);
@@ -142,6 +182,7 @@ public class InfoController {
         return new ResponseEntity<>(message, responseHeaders, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "게시글 수정", notes = "사용자의 게시글을 수정한다.")
     @PutMapping("/info/{num}")
     public ResponseEntity<Message> modInfo(
             @PathVariable Long num,

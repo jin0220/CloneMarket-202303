@@ -43,7 +43,7 @@ public class TownInfoAdapter extends RecyclerView.Adapter<TownInfoAdapter.ViewHo
         binding.title.setText(data.getTitle());
         binding.content.setText(data.getContent());
         binding.town.setText(data.getTown());
-//        binding.time.setText(data.getDate());
+        binding.time.setText(data.getTime());
         binding.viewCnt.setText(data.getViewCnt().toString());
     }
 

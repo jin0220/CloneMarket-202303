@@ -1,5 +1,6 @@
 package com.example.toy.service;
 
+import com.example.toy.dto.ChattingRoomDto;
 import com.example.toy.entity.ChattingContent;
 import com.example.toy.entity.ChattingRoom;
 import com.example.toy.repository.ChattingContentRepository;
@@ -30,8 +31,9 @@ public class ChatService {
         return chattingRoomRepository.findChattingRoom(postNum, userPhone);
     }
 
-    public List<ChattingRoom> getRoomList(String userPhone){
-        return chattingRoomRepository.findByBuyerUser(userPhone);
+    public List<ChattingRoomDto> getRoomList(String userPhone){
+//        return chattingRoomRepository.findByBuyerUser(userPhone);
+        return chattingRoomRepository.getRoomList(userPhone);
     }
 
     public List<ChattingContent> getChattingContent(Long roomId) {

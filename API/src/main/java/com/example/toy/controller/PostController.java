@@ -6,6 +6,7 @@ import com.example.toy.entity.response.Message;
 import com.example.toy.entity.response.StatusEnum;
 import com.example.toy.service.MemberService;
 import com.example.toy.service.PostService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +48,7 @@ public class PostController {
         responseHeaders.add("Content-Type", "application/json; charset=UTF-8");
     }
 
+    @ApiOperation(value = "게시글 조회", notes = "전체 게시글을 조회한다.")
     @GetMapping("/posts")
     @ResponseBody
     public ResponseEntity<Message> getPost(@Param("page") int page) {
@@ -76,6 +78,7 @@ public class PostController {
         return new ResponseEntity<>(message, responseHeaders, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "게시글 작성", notes = "")
     @PostMapping("/post")
     @ResponseBody
     public ResponseEntity<Message> post(
@@ -135,6 +138,7 @@ public class PostController {
         return new ResponseEntity<>(message, responseHeaders, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "게시글 상세 정보 조회", notes = "게시글의 상세정보를 조회한다.")
     @GetMapping("/postDetail")
     @ResponseBody
     public ResponseEntity<Message> getPostDetail(@Param("postNum") String postNum) {

@@ -1,11 +1,14 @@
 package com.example.clonemarket.ui;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +18,13 @@ import com.example.clonemarket.data.PreferenceManager;
 import com.example.clonemarket.data.model.TownInfoDto;
 import com.example.clonemarket.databinding.FragmentChattingRoomBinding;
 import com.example.clonemarket.databinding.FragmentTownInfoBinding;
+import com.example.clonemarket.lib.DateParse;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -30,11 +36,14 @@ public class TownInfoFragment extends Fragment {
 
     int page;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentTownInfoBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+
+        DateParse dateParse = new DateParse();
 
         adapter = new TownInfoAdapter();
         binding.recyclerView.setAdapter(adapter);
@@ -65,6 +74,22 @@ public class TownInfoFragment extends Fragment {
                             data.setContent(obj.get("content").getAsString());
                             data.setTown(obj.get("town").getAsString());
                             data.setViewCnt(Long.parseLong(obj.get("viewCnt").getAsString()));
+
+                            SimpleDateFormat date1 = new SimpleDateFormat("yyyy-MM-dd");
+
+                            Date today = new Date(System.currentTimeMillis());
+
+                            if(obj.get("date").getAsString().equals(date1.format(today)))
+                                data.setTime(obj.get("time").getAsString());
+                            else {
+                                int dif = dateParse.dateDif(obj.get("date").getAsString(), date1.format(today));
+                                if(dif < 30)
+                                    data.setTime(dif+"일전");
+                                else if(dif < 365)
+                                    data.setTime(dif/30+"개월전");
+                                else
+                                    data.setTime(dif/365+"년전");
+                            }
 
                             list.add(data);
                         }

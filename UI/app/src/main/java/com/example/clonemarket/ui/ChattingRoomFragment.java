@@ -13,12 +13,16 @@ import android.view.ViewGroup;
 
 import com.example.clonemarket.R;
 import com.example.clonemarket.data.PreferenceManager;
+import com.example.clonemarket.data.api.RetrofitClient;
 import com.example.clonemarket.data.model.ChatDto;
 import com.example.clonemarket.databinding.FragmentChattingRoomBinding;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -63,9 +67,25 @@ public class ChattingRoomFragment extends Fragment {
                         ChatDto data = new ChatDto();
                         data.setRoomId(roomId);
 //                        data.setPhone(jsonObject1.get("sellerUser").getAsString());
-                        data.setNickName(jsonObject1.get("sellerUser").getAsString());
-//                        data.setContent(jsonObject1.get("contents").getAsString());
-//                        data.setTime(jsonObject1.get("sendTime").getAsString());
+                        data.setNickName(jsonObject1.get("nickName").getAsString());
+                        data.setContent(jsonObject1.get("contents").getAsString());
+
+                        if(!jsonObject1.get("profile").isJsonNull() && !jsonObject1.get("profile").getAsString().equals(""))
+                            data.setImg(RetrofitClient.BASE_URL + "profile/" + jsonObject1.get("profile").getAsString());
+
+
+                        SimpleDateFormat date1 = new SimpleDateFormat("yyyy-MM-dd");
+                        SimpleDateFormat date2 = new SimpleDateFormat("MM-dd");
+                        SimpleDateFormat time = new SimpleDateFormat("HH:mm");
+
+                        Long timeInMillis = Long.parseLong(jsonObject1.get("sendTime").getAsString());
+                        Date timeInDate = new Date(timeInMillis);
+                        Date today = new Date(System.currentTimeMillis());
+
+                        if(date1.format(timeInDate).equals(date1.format(today)))
+                            data.setTime(time.format(timeInDate));
+                        else
+                            data.setTime(date2.format(timeInDate));
 
                         list.add(data);
                     }

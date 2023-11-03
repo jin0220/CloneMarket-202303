@@ -54,7 +54,7 @@ public class InfoDetailActivity extends AppCompatActivity {
                     content = jsonElement.getAsJsonObject().get("content").getAsString();
 
                     binding.nickName.setText(jsonElement.getAsJsonObject().get("nickName").getAsString());
-                    if(!jsonElement.getAsJsonObject().get("profile").isJsonNull() || !jsonElement.getAsJsonObject().get("profile").getAsString().equals(""))
+                    if(!jsonElement.getAsJsonObject().get("profile").isJsonNull() && !jsonElement.getAsJsonObject().get("profile").getAsString().equals(""))
                         Picasso.get().load(RetrofitClient.BASE_URL + "profile/" + jsonElement.getAsJsonObject().get("profile").getAsString()).into(binding.imageView);
                     binding.title.setText(title);
                     binding.content.setText(content);

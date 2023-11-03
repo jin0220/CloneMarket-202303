@@ -45,6 +45,8 @@ public class InfoService {
     public boolean setInfo(Info info){
         Member member = memberRepository.findUserByPhone(info.getWriter());
         info.setTown(member.getTown());
+        info.setCommentCnt(0L);
+        info.setViewCnt(0L);
 
         Info chk = infoRepository.save(info);
 

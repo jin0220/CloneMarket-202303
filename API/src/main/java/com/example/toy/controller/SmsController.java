@@ -5,6 +5,7 @@ import com.example.toy.entity.response.SmsResponse;
 import com.example.toy.entity.response.StatusEnum;
 import com.example.toy.service.SmsService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,7 @@ public class SmsController {
         responseHeaders.add("Content-Type", "application/json; charset=UTF-8");
     }
 
-
+    @ApiOperation(value = "휴대전화 인증 번호 발급", notes = "")
     @PostMapping("/sms")
     @ResponseBody
     public ResponseEntity<Message> sms(@RequestBody HashMap<String, Object> param) throws UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, JsonProcessingException {

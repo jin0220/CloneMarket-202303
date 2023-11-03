@@ -7,6 +7,7 @@ public class ChatDto {
     private String nickName;
     private String content;
     private String time;
+    private String img;
 
     public Long getRoomId() {
         return roomId;
@@ -46,5 +47,13 @@ public class ChatDto {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 }
