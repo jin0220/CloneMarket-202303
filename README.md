@@ -26,21 +26,23 @@
 
 ## 기능 설명
 ### ERD
-<img width="640" alt="클론마켓_ERD" src="https://github.com/jin0220/CloneMarket-202303/assets/37447282/4eb18a84-fd8c-4db3-9140-d4c72e6a9188">
+<img width="640" alt="클론마켓_ERD" src="https://github.com/jin0220/CloneMarket-202303/assets/37447282/64ce4cc1-2ccc-4fe8-9094-b4dd2e9caca7">
+
 
 ### 로그인 및 회원가입
-![플젝2](https://github.com/jin0220/CloneMarket-202303/assets/37447282/1f963b97-04f7-4b23-ab84-6e7203b8a495)
+![플젝2](https://github.com/jin0220/CloneMarket-202303/assets/37447282/60e358ba-c833-42e2-86cf-dd44ef8c3c8a)
 
 1. 회원정보에는 사용자의 위치가 필수 정보이며, 사용자 위치 기반으로 가까운 동네순으로 리스트를 제공한다.
 2. 회원의 전화번호 인증을 통해 회원가입 및 로그인이 된다.
 
-![플젝3](https://github.com/jin0220/CloneMarket-202303/assets/37447282/7006eae2-7326-4115-996b-d8267e6f3ecc)
+![플젝3](https://github.com/jin0220/CloneMarket-202303/assets/37447282/431fec3d-3e5a-4b9f-982d-2b7bd39626b6)
+
 3. 회원가입 시 사용자의 프로필 설정을 할 수 있도록 한다.
 
 <br>
 
 ### 게시물(카테고리 - 내 물건 팔기)
-![플젝4](https://github.com/jin0220/CloneMarket-202303/assets/37447282/7f05561d-3229-41f1-8435-31f4dcf09852)
+![플젝4](https://github.com/jin0220/CloneMarket-202303/assets/37447282/48399d1d-6311-40fc-a085-c832057dad41)
 
 1. 모든 사용자들이 작성한 게시물들을 확인할 수 있다.
 2. 사용자가 해당 게시물 작성자와 채팅할 수 있도록 한다.
@@ -48,7 +50,7 @@
 <br>
 
 ### 게시물(카테코리  - 동네생활)
-![플젝5](https://github.com/jin0220/CloneMarket-202303/assets/37447282/730b5f84-b14b-497d-a1b0-aff019d6fb40)
+![플젝5](https://github.com/jin0220/CloneMarket-202303/assets/37447282/6d662ef9-3388-4de9-a4a4-ffa05cf82a89)
 
 1. 모든 사용자들이 작성한 게시물들을 확인할 수 있다.
 2. 사용자는 해당 게시물에 댓글을 달 수 있다.
@@ -56,7 +58,7 @@
 <br>
 
 ### 채팅
-![플젝1](https://github.com/jin0220/CloneMarket-202303/assets/37447282/15e6b9ea-178d-4391-9021-d3c7340911da)
+![플젝1](https://github.com/jin0220/CloneMarket-202303/assets/37447282/a26aa6e3-7998-4b5a-9bd3-e25b390d4f89)
 
 1. 사용자가 참여했던 채팅 리스트를 보여준다.
 2. 해당 채팅 기능은 네티 프레임워크를 사용하여 비동기 네트워크를 구현하였다.
