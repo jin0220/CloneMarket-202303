@@ -1,7 +1,7 @@
 # 클론마켓
 
 ## 프로젝트 설명
-당근마켓 일부 서비스를 클론한 어플리케이션입니다.
+당근마켓의 일부 서비스를 클론한 어플리케이션입니다.
 
 ### Front
 - 개발 환경: Android Studio
@@ -15,6 +15,7 @@
 - 프레임워크: Spring Boot, Swagger UI(API 자동 문서화)
 - 라이브러리: Lombok, Security, FileUpload, JWT, Netty, Json
 - 인터페이스: JPA
+- 빌드: Gradle
 
 <br>
 
