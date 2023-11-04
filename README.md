@@ -34,11 +34,17 @@
 ![플젝2](https://github.com/jin0220/CloneMarket-202303/assets/37447282/60e358ba-c833-42e2-86cf-dd44ef8c3c8a)
 
 1. 회원정보에는 사용자의 위치가 필수 정보이며, 사용자 위치 기반으로 가까운 동네순으로 리스트를 제공한다.
+   - 엑셀로 제공된 동네 리스트를 DB에 저장하기 위해 파이썬 프로그램을 구현
+     
 2. 회원의 전화번호 인증을 통해 회원가입 및 로그인이 된다.
+   - 사용자 인증을 위해 JWT 구현.
+   - 사용자가 로그인은 하면 Access Token과 Refresh Token을 반환해줌.
+   - 사용자는 반환 받은 Access Token과 Refresh Token을 사용하여 인증 과정을 거침.
 
 ![플젝3](https://github.com/jin0220/CloneMarket-202303/assets/37447282/431fec3d-3e5a-4b9f-982d-2b7bd39626b6)
 
 3. 회원가입 시 사용자의 프로필 설정을 할 수 있도록 한다.
+   
 
 <br>
 
@@ -62,7 +68,8 @@
 ![플젝1](https://github.com/jin0220/CloneMarket-202303/assets/37447282/a26aa6e3-7998-4b5a-9bd3-e25b390d4f89)
 
 1. 사용자가 참여했던 채팅 리스트를 보여준다.
-2. 해당 채팅 기능은 네티 프레임워크를 사용하여 비동기 네트워크를 구현하였다.
+   - Netty Framwork를 통한 비동기식 네트워크를 적용하여 채팅 기능 구현.
+     
 
 <br>
 
